@@ -1,0 +1,1306 @@
+﻿> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :freeDevServerPort
+> Task :resolveMainClassName
+
+> Task :bootRun
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.5)
+
+2026-05-20T20:26:05.337+09:00  INFO 21256 --- [           main] com.basisi.backend.BasisiApplication     : Starting BasisiApplication using Java 17.0.17 with PID 21256 (C:\Users\Haakim\Desktop\Basisi\build\classes\java\main started by Haakim in C:\Users\Haakim\Desktop\Basisi)
+2026-05-20T20:26:05.339+09:00  INFO 21256 --- [           main] com.basisi.backend.BasisiApplication     : The following 1 profile is active: "h2"
+2026-05-20T20:26:06.049+09:00  INFO 21256 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-05-20T20:26:06.050+09:00  INFO 21256 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-20T20:26:06.275+09:00  INFO 21256 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 220 ms. Found 8 JPA repository interfaces.
+2026-05-20T20:26:06.726+09:00  INFO 21256 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-05-20T20:26:06.736+09:00  INFO 21256 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-20T20:26:06.736+09:00  INFO 21256 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.31]
+2026-05-20T20:26:06.793+09:00  INFO 21256 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-20T20:26:06.794+09:00  INFO 21256 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1415 ms
+2026-05-20T20:26:06.816+09:00  WARN 21256 --- [           main] com.zaxxer.hikari.HikariConfig           : HikariPool-1 - idleTimeout has been set but has no effect because the pool is operating as a fixed size pool.
+2026-05-20T20:26:06.817+09:00  INFO 21256 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-20T20:26:07.073+09:00  INFO 21256 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn1: url=jdbc:h2:file:./data/basisi user=SA
+2026-05-20T20:26:07.075+09:00  INFO 21256 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-20T20:26:07.083+09:00  INFO 21256 --- [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:file:./data/basisi'
+2026-05-20T20:26:07.159+09:00  INFO 21256 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-20T20:26:07.201+09:00  INFO 21256 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-05-20T20:26:07.209+09:00  INFO 21256 --- [           main] o.h.spatial.integration.SpatialService   : HHH80000001: hibernate-spatial integration enabled : true
+2026-05-20T20:26:07.227+09:00  INFO 21256 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-05-20T20:26:07.352+09:00  INFO 21256 --- [           main] org.hibernate.spatial                    : HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.h2gis.H2GisDialectContributor
+2026-05-20T20:26:07.513+09:00  INFO 21256 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-20T20:26:07.538+09:00  INFO 21256 --- [           main] org.hibernate.spatial                    : HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.h2gis.H2GisDialectContributor
+2026-05-20T20:26:07.824+09:00  INFO 21256 --- [           main] org.hibernate.spatial                    : HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.h2gis.H2GisDialectContributor
+2026-05-20T20:26:08.373+09:00  INFO 21256 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    alter table if exists parent_profiles 
+       alter column children_json set data type TEXT
+Hibernate: 
+    alter table if exists parent_profiles 
+       alter column expectation_keywords_json set data type TEXT
+Hibernate: 
+    alter table if exists sitter_profile_images 
+       alter column data set data type BYTEA
+Hibernate: 
+    alter table if exists sitter_profiles 
+       alter column available_activities_json set data type TEXT
+Hibernate: 
+    alter table if exists sitter_profiles 
+       alter column preferred_age_groups_json set data type TEXT
+Hibernate: 
+    alter table if exists sitter_profiles 
+       alter column preferred_regions_json set data type TEXT
+Hibernate: 
+    alter table if exists sitter_profiles 
+       alter column profile_photo_ids_json set data type TEXT
+Hibernate: 
+    alter table if exists processed_events 
+       drop constraint if exists uk_processed_event_consumer
+Hibernate: 
+    alter table if exists processed_events 
+       add constraint uk_processed_event_consumer unique (event_id, consumer_name)
+2026-05-20T20:26:08.422+09:00  INFO 21256 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-20T20:26:08.835+09:00  INFO 21256 --- [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-20T20:26:09.221+09:00  INFO 21256 --- [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-05-20T20:26:09.640+09:00  INFO 21256 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-05-20T20:26:09.649+09:00  INFO 21256 --- [           main] com.basisi.backend.BasisiApplication     : Started BasisiApplication in 4.652 seconds (process running for 4.955)
+2026-05-20T20:26:16.450+09:00  INFO 21256 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-20T20:26:16.450+09:00  INFO 21256 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-20T20:26:16.451+09:00  INFO 21256 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        pp1_0.id,
+        pp1_0.care_child_id,
+        pp1_0.child_note,
+        pp1_0.children_json,
+        pp1_0.created_at,
+        pp1_0.expectation_keywords_json,
+        pp1_0.parent_work_type,
+        pp1_0.phone_number,
+        pp1_0.preferred_region_dong,
+        pp1_0.preferred_region_sido,
+        pp1_0.preferred_region_sigungu,
+        pp1_0.preferred_sitter_age_range,
+        pp1_0.preferred_sitter_experience,
+        pp1_0.preferred_sitter_gender,
+        pp1_0.preferred_sitter_nationality,
+        pp1_0.region,
+        pp1_0.region_dong,
+        pp1_0.region_sido,
+        pp1_0.region_sigungu,
+        pp1_0.schedule_type,
+        pp1_0.sitter_message,
+        pp1_0.updated_at,
+        pp1_0.user_id 
+    from
+        parent_profiles pp1_0 
+    where
+        pp1_0.user_id=?
+Hibernate: 
+    select
+        pp1_0.id,
+        pp1_0.care_child_id,
+        pp1_0.child_note,
+        pp1_0.children_json,
+        pp1_0.created_at,
+        pp1_0.expectation_keywords_json,
+        pp1_0.parent_work_type,
+        pp1_0.phone_number,
+        pp1_0.preferred_region_dong,
+        pp1_0.preferred_region_sido,
+        pp1_0.preferred_region_sigungu,
+        pp1_0.preferred_sitter_age_range,
+        pp1_0.preferred_sitter_experience,
+        pp1_0.preferred_sitter_gender,
+        pp1_0.preferred_sitter_nationality,
+        pp1_0.region,
+        pp1_0.region_dong,
+        pp1_0.region_sido,
+        pp1_0.region_sigungu,
+        pp1_0.schedule_type,
+        pp1_0.sitter_message,
+        pp1_0.updated_at,
+        pp1_0.user_id 
+    from
+        parent_profiles pp1_0 
+    where
+        pp1_0.user_id=?
+Hibernate: 
+    select
+        sp1_0.id,
+        sp1_0.user_id,
+        u1_0.name,
+        sp1_0.bio,
+        sp1_0.age,
+        sp1_0.gender,
+        sp1_0.years_of_experience,
+        sp1_0.has_certificate,
+        sp1_0.region,
+        sp1_0.nationality_type,
+        coalesce(ss1_0.score, ?),
+        coalesce(ss1_0.grade, ?),
+        coalesce(ss1_0.completed_reservation_count, ?),
+        coalesce(ss1_0.average_rating, ?),
+        coalesce(ss1_0.recent_activity_count, ?),
+        (((((cast(? as integer)+case 
+            when (lower(sp1_0.gender)=?) 
+                then cast(? as integer) 
+            else 0 
+    end)+case 
+        when (sp1_0.age between ? and ?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) 
+from
+    sitter_profiles sp1_0 
+join
+    users u1_0 
+        on u1_0.id=sp1_0.user_id 
+left join
+    sitter_scores ss1_0 
+        on ss1_0.sitter_profile_id=sp1_0.id 
+where
+    (
+        (
+            (
+                (
+                    (
+                        cast(? as integer)+case 
+                            when (lower(sp1_0.gender)=?) 
+                                then cast(? as integer) 
+                            else 0 
+                    end
+                )+case 
+                    when (sp1_0.age between ? and ?) 
+                        then cast(? as integer) 
+                    else 0 
+            end
+        )+case 
+            when (sp1_0.years_of_experience between ? and ?) 
+                then cast(? as integer) 
+            else 0 
+    end
+)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end
+)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end
+)>=? 
+order by
+    (((((cast(? as integer)+case 
+        when (lower(sp1_0.gender)=?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.age between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) desc,
+coalesce(ss1_0.score, ?) desc 
+fetch
+    first ? rows only
+Hibernate: 
+    select
+        sp1_0.id,
+        sp1_0.user_id,
+        u1_0.name,
+        sp1_0.bio,
+        sp1_0.age,
+        sp1_0.gender,
+        sp1_0.years_of_experience,
+        sp1_0.has_certificate,
+        sp1_0.region,
+        sp1_0.nationality_type,
+        coalesce(ss1_0.score, ?),
+        coalesce(ss1_0.grade, ?),
+        coalesce(ss1_0.completed_reservation_count, ?),
+        coalesce(ss1_0.average_rating, ?),
+        coalesce(ss1_0.recent_activity_count, ?),
+        (((((cast(? as integer)+case 
+            when (lower(sp1_0.gender)=?) 
+                then cast(? as integer) 
+            else 0 
+    end)+case 
+        when (sp1_0.age between ? and ?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) 
+from
+    sitter_profiles sp1_0 
+join
+    users u1_0 
+        on u1_0.id=sp1_0.user_id 
+left join
+    sitter_scores ss1_0 
+        on ss1_0.sitter_profile_id=sp1_0.id 
+where
+    (
+        (
+            (
+                (
+                    (
+                        cast(? as integer)+case 
+                            when (lower(sp1_0.gender)=?) 
+                                then cast(? as integer) 
+                            else 0 
+                    end
+                )+case 
+                    when (sp1_0.age between ? and ?) 
+                        then cast(? as integer) 
+                    else 0 
+            end
+        )+case 
+            when (sp1_0.years_of_experience between ? and ?) 
+                then cast(? as integer) 
+            else 0 
+    end
+)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end
+)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end
+)>=? 
+order by
+    (((((cast(? as integer)+case 
+        when (lower(sp1_0.gender)=?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.age between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) desc,
+coalesce(ss1_0.score, ?) desc 
+fetch
+    first ? rows only
+Hibernate: 
+    select
+        sp1_0.id,
+        sp1_0.user_id,
+        u1_0.name,
+        sp1_0.bio,
+        sp1_0.age,
+        sp1_0.gender,
+        sp1_0.years_of_experience,
+        sp1_0.has_certificate,
+        sp1_0.region,
+        sp1_0.nationality_type,
+        coalesce(ss1_0.score, ?),
+        coalesce(ss1_0.grade, ?),
+        coalesce(ss1_0.completed_reservation_count, ?),
+        coalesce(ss1_0.average_rating, ?),
+        coalesce(ss1_0.recent_activity_count, ?),
+        (((((cast(? as integer)+case 
+            when (lower(sp1_0.gender)=?) 
+                then cast(? as integer) 
+            else 0 
+    end)+case 
+        when (sp1_0.age between ? and ?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) 
+from
+    sitter_profiles sp1_0 
+join
+    users u1_0 
+        on u1_0.id=sp1_0.user_id 
+left join
+    sitter_scores ss1_0 
+        on ss1_0.sitter_profile_id=sp1_0.id 
+where
+    (
+        (
+            (
+                (
+                    (
+                        cast(? as integer)+case 
+                            when (lower(sp1_0.gender)=?) 
+                                then cast(? as integer) 
+                            else 0 
+                    end
+                )+case 
+                    when (sp1_0.age between ? and ?) 
+                        then cast(? as integer) 
+                    else 0 
+            end
+        )+case 
+            when (sp1_0.years_of_experience between ? and ?) 
+                then cast(? as integer) 
+            else 0 
+    end
+)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end
+)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end
+)>=? 
+order by
+    (((((cast(? as integer)+case 
+        when (lower(sp1_0.gender)=?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.age between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) desc,
+coalesce(ss1_0.score, ?) desc 
+fetch
+    first ? rows only
+Hibernate: 
+    select
+        sp1_0.id,
+        sp1_0.user_id,
+        u1_0.name,
+        sp1_0.bio,
+        sp1_0.age,
+        sp1_0.gender,
+        sp1_0.years_of_experience,
+        sp1_0.has_certificate,
+        sp1_0.region,
+        sp1_0.nationality_type,
+        coalesce(ss1_0.score, ?),
+        coalesce(ss1_0.grade, ?),
+        coalesce(ss1_0.completed_reservation_count, ?),
+        coalesce(ss1_0.average_rating, ?),
+        coalesce(ss1_0.recent_activity_count, ?),
+        (((((cast(? as integer)+case 
+            when (lower(sp1_0.gender)=?) 
+                then cast(? as integer) 
+            else 0 
+    end)+case 
+        when (sp1_0.age between ? and ?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) 
+from
+    sitter_profiles sp1_0 
+join
+    users u1_0 
+        on u1_0.id=sp1_0.user_id 
+left join
+    sitter_scores ss1_0 
+        on ss1_0.sitter_profile_id=sp1_0.id 
+where
+    (
+        (
+            (
+                (
+                    (
+                        cast(? as integer)+case 
+                            when (lower(sp1_0.gender)=?) 
+                                then cast(? as integer) 
+                            else 0 
+                    end
+                )+case 
+                    when (sp1_0.age between ? and ?) 
+                        then cast(? as integer) 
+                    else 0 
+            end
+        )+case 
+            when (sp1_0.years_of_experience between ? and ?) 
+                then cast(? as integer) 
+            else 0 
+    end
+)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end
+)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end
+)>=? 
+order by
+    (((((cast(? as integer)+case 
+        when (lower(sp1_0.gender)=?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.age between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) desc,
+coalesce(ss1_0.score, ?) desc 
+fetch
+    first ? rows only
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        pp1_0.id,
+        pp1_0.care_child_id,
+        pp1_0.child_note,
+        pp1_0.children_json,
+        pp1_0.created_at,
+        pp1_0.expectation_keywords_json,
+        pp1_0.parent_work_type,
+        pp1_0.phone_number,
+        pp1_0.preferred_region_dong,
+        pp1_0.preferred_region_sido,
+        pp1_0.preferred_region_sigungu,
+        pp1_0.preferred_sitter_age_range,
+        pp1_0.preferred_sitter_experience,
+        pp1_0.preferred_sitter_gender,
+        pp1_0.preferred_sitter_nationality,
+        pp1_0.region,
+        pp1_0.region_dong,
+        pp1_0.region_sido,
+        pp1_0.region_sigungu,
+        pp1_0.schedule_type,
+        pp1_0.sitter_message,
+        pp1_0.updated_at,
+        pp1_0.user_id 
+    from
+        parent_profiles pp1_0 
+    where
+        pp1_0.user_id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        pp1_0.id,
+        pp1_0.care_child_id,
+        pp1_0.child_note,
+        pp1_0.children_json,
+        pp1_0.created_at,
+        pp1_0.expectation_keywords_json,
+        pp1_0.parent_work_type,
+        pp1_0.phone_number,
+        pp1_0.preferred_region_dong,
+        pp1_0.preferred_region_sido,
+        pp1_0.preferred_region_sigungu,
+        pp1_0.preferred_sitter_age_range,
+        pp1_0.preferred_sitter_experience,
+        pp1_0.preferred_sitter_gender,
+        pp1_0.preferred_sitter_nationality,
+        pp1_0.region,
+        pp1_0.region_dong,
+        pp1_0.region_sido,
+        pp1_0.region_sigungu,
+        pp1_0.schedule_type,
+        pp1_0.sitter_message,
+        pp1_0.updated_at,
+        pp1_0.user_id 
+    from
+        parent_profiles pp1_0 
+    where
+        pp1_0.user_id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        upper(u1_0.email)=upper(?)
+Hibernate: 
+    select
+        pp1_0.id,
+        pp1_0.care_child_id,
+        pp1_0.child_note,
+        pp1_0.children_json,
+        pp1_0.created_at,
+        pp1_0.expectation_keywords_json,
+        pp1_0.parent_work_type,
+        pp1_0.phone_number,
+        pp1_0.preferred_region_dong,
+        pp1_0.preferred_region_sido,
+        pp1_0.preferred_region_sigungu,
+        pp1_0.preferred_sitter_age_range,
+        pp1_0.preferred_sitter_experience,
+        pp1_0.preferred_sitter_gender,
+        pp1_0.preferred_sitter_nationality,
+        pp1_0.region,
+        pp1_0.region_dong,
+        pp1_0.region_sido,
+        pp1_0.region_sigungu,
+        pp1_0.schedule_type,
+        pp1_0.sitter_message,
+        pp1_0.updated_at,
+        pp1_0.user_id 
+    from
+        parent_profiles pp1_0 
+    where
+        pp1_0.user_id=?
+Hibernate: 
+    select
+        pp1_0.id,
+        pp1_0.care_child_id,
+        pp1_0.child_note,
+        pp1_0.children_json,
+        pp1_0.created_at,
+        pp1_0.expectation_keywords_json,
+        pp1_0.parent_work_type,
+        pp1_0.phone_number,
+        pp1_0.preferred_region_dong,
+        pp1_0.preferred_region_sido,
+        pp1_0.preferred_region_sigungu,
+        pp1_0.preferred_sitter_age_range,
+        pp1_0.preferred_sitter_experience,
+        pp1_0.preferred_sitter_gender,
+        pp1_0.preferred_sitter_nationality,
+        pp1_0.region,
+        pp1_0.region_dong,
+        pp1_0.region_sido,
+        pp1_0.region_sigungu,
+        pp1_0.schedule_type,
+        pp1_0.sitter_message,
+        pp1_0.updated_at,
+        pp1_0.user_id 
+    from
+        parent_profiles pp1_0 
+    where
+        pp1_0.user_id=?
+Hibernate: 
+    select
+        sp1_0.id,
+        sp1_0.user_id,
+        u1_0.name,
+        sp1_0.bio,
+        sp1_0.age,
+        sp1_0.gender,
+        sp1_0.years_of_experience,
+        sp1_0.has_certificate,
+        sp1_0.region,
+        sp1_0.nationality_type,
+        coalesce(ss1_0.score, ?),
+        coalesce(ss1_0.grade, ?),
+        coalesce(ss1_0.completed_reservation_count, ?),
+        coalesce(ss1_0.average_rating, ?),
+        coalesce(ss1_0.recent_activity_count, ?),
+        (((((cast(? as integer)+case 
+            when (lower(sp1_0.gender)=?) 
+                then cast(? as integer) 
+            else 0 
+    end)+case 
+        when (sp1_0.age between ? and ?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) 
+from
+    sitter_profiles sp1_0 
+join
+    users u1_0 
+        on u1_0.id=sp1_0.user_id 
+left join
+    sitter_scores ss1_0 
+        on ss1_0.sitter_profile_id=sp1_0.id 
+where
+    (
+        (
+            (
+                (
+                    (
+                        cast(? as integer)+case 
+                            when (lower(sp1_0.gender)=?) 
+                                then cast(? as integer) 
+                            else 0 
+                    end
+                )+case 
+                    when (sp1_0.age between ? and ?) 
+                        then cast(? as integer) 
+                    else 0 
+            end
+        )+case 
+            when (sp1_0.years_of_experience between ? and ?) 
+                then cast(? as integer) 
+            else 0 
+    end
+)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end
+)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end
+)>=? 
+order by
+    (((((cast(? as integer)+case 
+        when (lower(sp1_0.gender)=?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.age between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) desc,
+coalesce(ss1_0.score, ?) desc 
+fetch
+    first ? rows only
+Hibernate: 
+    select
+        sp1_0.id,
+        sp1_0.user_id,
+        u1_0.name,
+        sp1_0.bio,
+        sp1_0.age,
+        sp1_0.gender,
+        sp1_0.years_of_experience,
+        sp1_0.has_certificate,
+        sp1_0.region,
+        sp1_0.nationality_type,
+        coalesce(ss1_0.score, ?),
+        coalesce(ss1_0.grade, ?),
+        coalesce(ss1_0.completed_reservation_count, ?),
+        coalesce(ss1_0.average_rating, ?),
+        coalesce(ss1_0.recent_activity_count, ?),
+        (((((cast(? as integer)+case 
+            when (lower(sp1_0.gender)=?) 
+                then cast(? as integer) 
+            else 0 
+    end)+case 
+        when (sp1_0.age between ? and ?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) 
+from
+    sitter_profiles sp1_0 
+join
+    users u1_0 
+        on u1_0.id=sp1_0.user_id 
+left join
+    sitter_scores ss1_0 
+        on ss1_0.sitter_profile_id=sp1_0.id 
+where
+    (
+        (
+            (
+                (
+                    (
+                        cast(? as integer)+case 
+                            when (lower(sp1_0.gender)=?) 
+                                then cast(? as integer) 
+                            else 0 
+                    end
+                )+case 
+                    when (sp1_0.age between ? and ?) 
+                        then cast(? as integer) 
+                    else 0 
+            end
+        )+case 
+            when (sp1_0.years_of_experience between ? and ?) 
+                then cast(? as integer) 
+            else 0 
+    end
+)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end
+)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end
+)>=? 
+order by
+    (((((cast(? as integer)+case 
+        when (lower(sp1_0.gender)=?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.age between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) desc,
+coalesce(ss1_0.score, ?) desc 
+fetch
+    first ? rows only
+Hibernate: 
+    select
+        sp1_0.id,
+        sp1_0.user_id,
+        u1_0.name,
+        sp1_0.bio,
+        sp1_0.age,
+        sp1_0.gender,
+        sp1_0.years_of_experience,
+        sp1_0.has_certificate,
+        sp1_0.region,
+        sp1_0.nationality_type,
+        coalesce(ss1_0.score, ?),
+        coalesce(ss1_0.grade, ?),
+        coalesce(ss1_0.completed_reservation_count, ?),
+        coalesce(ss1_0.average_rating, ?),
+        coalesce(ss1_0.recent_activity_count, ?),
+        (((((cast(? as integer)+case 
+            when (lower(sp1_0.gender)=?) 
+                then cast(? as integer) 
+            else 0 
+    end)+case 
+        when (sp1_0.age between ? and ?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) 
+from
+    sitter_profiles sp1_0 
+join
+    users u1_0 
+        on u1_0.id=sp1_0.user_id 
+left join
+    sitter_scores ss1_0 
+        on ss1_0.sitter_profile_id=sp1_0.id 
+where
+    (
+        (
+            (
+                (
+                    (
+                        cast(? as integer)+case 
+                            when (lower(sp1_0.gender)=?) 
+                                then cast(? as integer) 
+                            else 0 
+                    end
+                )+case 
+                    when (sp1_0.age between ? and ?) 
+                        then cast(? as integer) 
+                    else 0 
+            end
+        )+case 
+            when (sp1_0.years_of_experience between ? and ?) 
+                then cast(? as integer) 
+            else 0 
+    end
+)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end
+)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end
+)>=? 
+order by
+    (((((cast(? as integer)+case 
+        when (lower(sp1_0.gender)=?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.age between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) desc,
+coalesce(ss1_0.score, ?) desc 
+fetch
+    first ? rows only
+Hibernate: 
+    select
+        sp1_0.id,
+        sp1_0.user_id,
+        u1_0.name,
+        sp1_0.bio,
+        sp1_0.age,
+        sp1_0.gender,
+        sp1_0.years_of_experience,
+        sp1_0.has_certificate,
+        sp1_0.region,
+        sp1_0.nationality_type,
+        coalesce(ss1_0.score, ?),
+        coalesce(ss1_0.grade, ?),
+        coalesce(ss1_0.completed_reservation_count, ?),
+        coalesce(ss1_0.average_rating, ?),
+        coalesce(ss1_0.recent_activity_count, ?),
+        (((((cast(? as integer)+case 
+            when (lower(sp1_0.gender)=?) 
+                then cast(? as integer) 
+            else 0 
+    end)+case 
+        when (sp1_0.age between ? and ?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) 
+from
+    sitter_profiles sp1_0 
+join
+    users u1_0 
+        on u1_0.id=sp1_0.user_id 
+left join
+    sitter_scores ss1_0 
+        on ss1_0.sitter_profile_id=sp1_0.id 
+where
+    (
+        (
+            (
+                (
+                    (
+                        cast(? as integer)+case 
+                            when (lower(sp1_0.gender)=?) 
+                                then cast(? as integer) 
+                            else 0 
+                    end
+                )+case 
+                    when (sp1_0.age between ? and ?) 
+                        then cast(? as integer) 
+                    else 0 
+            end
+        )+case 
+            when (sp1_0.years_of_experience between ? and ?) 
+                then cast(? as integer) 
+            else 0 
+    end
+)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end
+)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end
+)>=? 
+order by
+    (((((cast(? as integer)+case 
+        when (lower(sp1_0.gender)=?) 
+            then cast(? as integer) 
+        else 0 
+end)+case 
+    when (sp1_0.age between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.years_of_experience between ? and ?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (sp1_0.nationality_type=?) 
+        then cast(? as integer) 
+    else 0 
+end)+case 
+    when (lower(sp1_0.region) like ? escape '!' 
+    or lower(sp1_0.region) like ? escape '!') 
+        then cast(? as integer) 
+    else 0 
+end) desc,
+coalesce(ss1_0.score, ?) desc 
+fetch
+    first ? rows only

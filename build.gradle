@@ -1,0 +1,102 @@
+// Gradle 플러그인을 선언합니다.
+plugins {
+    // Spring Boot 애플리케이션 빌드를 위한 플러그인입니다.
+    id 'org.springframework.boot' version '3.3.5'
+    // Spring 의존성 버전 관리를 위한 플러그인입니다.
+    id 'io.spring.dependency-management' version '1.1.6'
+    // Java 프로젝트 구성을 위한 플러그인입니다.
+    id 'java'
+}
+
+// 프로젝트 그룹 정보를 설정합니다.
+group = 'com.basisi'
+// 프로젝트 버전을 설정합니다.
+version = '0.0.1-SNAPSHOT'
+
+// Java Toolchain 버전을 17로 고정합니다.
+java {
+    toolchain {
+        // 팀 표준 JDK 버전을 명시합니다.
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+// 의존성을 내려받을 저장소를 지정합니다.
+repositories {
+    // Maven Central 저장소를 사용합니다.
+    mavenCentral()
+}
+
+// 프로젝트 의존성을 선언합니다.
+dependencies {
+    // REST API 개발을 위한 Spring Web 스타터입니다.
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // 인증/인가를 위한 Spring Security 스타터입니다.
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // JPA 기반 데이터 접근을 위한 스타터입니다.
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // PostGIS 공간 함수를 사용하기 위한 Hibernate Spatial 의존성입니다.
+    implementation 'org.hibernate.orm:hibernate-spatial'
+    // QueryDSL JPA 동적 쿼리를 위한 의존성입니다.
+    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+    // 입력값 검증을 위한 Validation 스타터입니다.
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // Swagger(OpenAPI) UI 및 문서 생성을 위한 의존성입니다.
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+    // Redis 기반 분산 락(Redisson) 사용을 위한 의존성입니다.
+    implementation 'org.redisson:redisson-spring-boot-starter:3.52.0'
+    // Kafka 기반 비동기 이벤트 파이프라인 의존성입니다.
+    implementation 'org.springframework.kafka:spring-kafka'
+    // JWT Access Token 생성을 위한 핵심 라이브러리입니다.
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    // JWT 구현체를 런타임에 로딩하기 위한 라이브러리입니다.
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    // JWT JSON 직렬화를 위한 Jackson 연동 라이브러리입니다.
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+    // PostgreSQL 데이터베이스 드라이버입니다.
+    runtimeOnly 'org.postgresql:postgresql'
+    // 로컬 단위 테스트/부팅 확인을 위한 H2 인메모리 데이터베이스입니다.
+    runtimeOnly 'com.h2database:h2'
+
+    // 반복 코드를 줄이기 위한 Lombok 의존성입니다.
+    compileOnly 'org.projectlombok:lombok'
+    // 컴파일 시 Lombok 어노테이션 처리를 활성화합니다.
+    annotationProcessor 'org.projectlombok:lombok'
+    // QueryDSL Q타입 생성을 위한 어노테이션 프로세서입니다.
+    annotationProcessor 'com.querydsl:querydsl-apt:5.1.0:jakarta'
+    // QueryDSL 어노테이션 프로세서에서 사용하는 Jakarta 어노테이션 API입니다.
+    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+    // QueryDSL 어노테이션 프로세서에서 사용하는 Jakarta Persistence API입니다.
+    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+
+    // 테스트 실행을 위한 Spring Boot 테스트 스타터입니다.
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // 보안 관련 테스트 지원 의존성입니다.
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+// JUnit Platform 기반으로 테스트를 실행하도록 설정합니다.
+tasks.named('test') {
+    // JUnit5 플랫폼을 사용합니다.
+    useJUnitPlatform()
+}
+
+// 이전 bootRun이 남겨 둔 Tomcat(8080) 때문에 실패하는 것을 막기 위해, bootRun 직전에 포트를 비웁니다.
+tasks.register('freeDevServerPort', Exec) {
+    group = 'application'
+    description = 'Stops any process listening on port 8080 (Windows). Safe no-op if port is free.'
+    def script = file("${rootDir}/scripts/free-port-8080.ps1")
+    onlyIf {
+        org.gradle.internal.os.OperatingSystem.current().windows && script.exists()
+    }
+    workingDir rootDir
+    commandLine(
+            'powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File',
+            script.absolutePath
+    )
+}
+
+tasks.named('bootRun') {
+    dependsOn tasks.named('freeDevServerPort')
+}

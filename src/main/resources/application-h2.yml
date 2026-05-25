@@ -1,0 +1,87 @@
+# H2 인메모리 DB로 빠르게 실행하기 위한 설정입니다.
+server:
+  # 로컬 실행 포트를 8080으로 지정합니다.
+  port: 8080
+
+# 스프링 및 데이터베이스 연동 설정입니다.
+spring:
+  autoconfigure:
+    exclude:
+      # 로컬에서 Redis를 띄우지 않을 때 Redisson 스타터가 연결을 강제하지 않도록 합니다.
+      - org.redisson.spring.starter.RedissonAutoConfigurationV2
+  datasource:
+    # 여러 PC에서 동일 계정을 쓰려면 공용 DB URL을 환경변수로 지정하세요. 예: BASISI_DATASOURCE_URL=jdbc:postgresql://호스트:5432/basisi
+    # H2 파일 DB(기본) — ./data/basisi. AUTO_SERVER는 DB_CLOSE_ON_EXIT=FALSE와 함께 쓸 수 없음(H2 2.2).
+    url: ${BASISI_DATASOURCE_URL:jdbc:h2:file:./data/basisi;MODE=PostgreSQL;AUTO_SERVER=TRUE}
+    username: ${BASISI_DATASOURCE_USERNAME:sa}
+    password: ${BASISI_DATASOURCE_PASSWORD:}
+    driver-class-name: ${BASISI_DATASOURCE_DRIVER:org.h2.Driver}
+    hikari:
+      # DB 락/네트워크 지연 시 무한 대기 방지
+      connection-timeout: 10000
+      # SSE/장시간 요청이 누수 시에도 어느 정도 여유를 두기 위해 풀 크기 확대
+      maximum-pool-size: 30
+      # 누수가 의심되면 60초 후 로그로 경고를 띄웁니다.
+      leak-detection-threshold: 60000
+      # 유휴 커넥션은 일정 시간 후 회수
+      idle-timeout: 300000
+      max-lifetime: 1200000
+  jpa:
+    hibernate:
+      # 개발 단계에서 테이블 스키마를 자동으로 업데이트합니다.
+      ddl-auto: update
+    properties:
+      hibernate:
+        # SQL 로그를 보기 좋게 출력하도록 설정합니다.
+        format_sql: true
+    # 실행되는 SQL을 콘솔에 출력합니다.
+    show-sql: true
+    # SSE(notifications/stream) 같은 장기 요청이 View 렌더링 동안 DB 커넥션을 잡고 있지 않도록 끕니다.
+    open-in-view: false
+  h2:
+    console:
+      # H2 콘솔을 활성화합니다.
+      enabled: true
+      # H2 콘솔 경로를 지정합니다.
+      path: /h2-console
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 12MB
+
+# JWT 발급/검증에 사용하는 설정입니다.
+jwt:
+  # 모든 PC/서버에서 동일한 토큰을 쓰려면 같은 값(BASISI_JWT_SECRET)으로 맞추세요.
+  secret: ${BASISI_JWT_SECRET:YmFzaXNpLWRldjItand0LXNlY3JldC1rZXktZm9yLWxvY2FsLXRlc3Q=}
+  # Access Token 만료 시간을 밀리초 단위로 설정합니다. (개발 편의를 위해 24시간)
+  access-token-expiration-ms: 86400000
+
+# 예약 정책 설정입니다.
+reservation:
+  policy:
+    # REQUESTED 상태 동시 요청 허용 여부입니다.
+    allow-requested-overlap: true
+    # 최소 예약 시간(분)입니다.
+    minimum-duration-minutes: 60
+  lock:
+    # 로컬 h2만 쓸 때는 Redis 없이 인메모리 락으로 동작합니다.
+    enabled: false
+    # enabled=true 일 때만 사용합니다.
+    redis-address: redis://127.0.0.1:6379
+    # 락 획득 대기 시간(초)입니다.
+    wait-seconds: 3
+    # 락 자동 해제 시간(초)입니다.
+    lease-seconds: 10
+
+# 비동기 이벤트 파이프라인(Kafka) 설정입니다.
+async:
+  events:
+    # 기본값은 비활성화입니다. Kafka를 띄운 뒤 true로 바꿔 사용하세요.
+    enabled: false
+    kafka:
+      bootstrap-servers: localhost:9092
+      consumer-group: basisi-event-consumers
+      topics:
+        reservation: basisi.reservation-events
+        review: basisi.review-events
+

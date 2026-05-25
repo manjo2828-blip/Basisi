@@ -1,0 +1,20 @@
+﻿
+> basisi-frontend@0.1.0 dev
+> vite
+
+
+  VITE v5.4.21  ready in 1292 ms
+
+  ?? Local:   http://localhost:5173/
+  ?? Network: use --host to expose
+node.exe : ?ㅽ썑 8:25:40 [vite] http proxy error: /api/notifications/stream?access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ
+wYXJlbnQxQG5hdmVyLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IlBBUkVOVCIsImlhdCI6MTc3OTI3NjAwNywiZXhwIjoxNzc5MzYyNDA3fQ.92h7OxKTWSA
+1wmgJ96A_tWfHz6BAw4jvEdLC5cStFwA
+위치 줄:1 문자:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (?ㅽ썑 8:25:40 [vi...w4jvEdLC5cStFwA:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Error: read ECONNRESET
+    at TCP.onStreamRead (node:internal/stream_base_commons:216:20)
