@@ -3,3 +3,7 @@ build/
 .idea/
 *.class
 bin/
+
+# 로컬 OpenAI API 키 (Git에 올리지 않음)
+scripts/local-secrets.ps1
+.env.local

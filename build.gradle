@@ -31,6 +31,8 @@ repositories {
 dependencies {
     // REST API 개발을 위한 Spring Web 스타터입니다.
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // OpenAI 등 외부 LLM API 호출용 WebClient입니다.
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     // 인증/인가를 위한 Spring Security 스타터입니다.
     implementation 'org.springframework.boot:spring-boot-starter-security'
     // JPA 기반 데이터 접근을 위한 스타터입니다.

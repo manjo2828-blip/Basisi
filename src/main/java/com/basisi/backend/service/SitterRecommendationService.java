@@ -1,5 +1,6 @@
 package com.basisi.backend.service;
 
+import com.basisi.backend.ai.SitterRecommendationLlmService;
 import com.basisi.backend.api.recommend.dto.RecommendMatchParams;
 import com.basisi.backend.api.recommend.dto.SitterRecommendItem;
 import com.basisi.backend.api.recommend.dto.SitterRecommendRequest;
@@ -41,15 +42,18 @@ public class SitterRecommendationService {
     private final UserRepository userRepository;
     private final ParentProfileRepository parentProfileRepository;
     private final SitterProfileRepository sitterProfileRepository;
+    private final SitterRecommendationLlmService recommendationLlmService;
 
     public SitterRecommendationService(
             UserRepository userRepository,
             ParentProfileRepository parentProfileRepository,
-            SitterProfileRepository sitterProfileRepository
+            SitterProfileRepository sitterProfileRepository,
+            SitterRecommendationLlmService recommendationLlmService
     ) {
         this.userRepository = userRepository;
         this.parentProfileRepository = parentProfileRepository;
         this.sitterProfileRepository = sitterProfileRepository;
+        this.recommendationLlmService = recommendationLlmService;
     }
 
     /** 현재 로그인한 부모를 기준으로 추천 결과를 생성합니다. */
@@ -67,9 +71,11 @@ public class SitterRecommendationService {
 
         int limit = clampLimit(request != null ? request.limit() : null);
         RecommendMatchParams params = buildParams(parent);
+        String additionalRequest = request != null ? request.additionalRequest() : null;
 
         if (params.activeConditionCount() == 0) {
-            return buildFallbackResponse(limit, "부모 마이페이지에 필수 조건이 비어 있어, 평점이 높은 인기 시터를 우선 보여드릴게요.");
+            SitterRecommendResponse fallback = buildFallbackResponse(limit, "부모 마이페이지에 필수 조건이 비어 있어, 평점이 높은 인기 시터를 우선 보여드릴게요.");
+            return recommendationLlmService.enhance(fallback, parent, params, additionalRequest, email);
         }
 
         int activeCount = params.activeConditionCount();
@@ -95,7 +101,8 @@ public class SitterRecommendationService {
 
         // 3차: 거의 일치 후보도 없으면 fallback (불꽃 점수 상위)
         if (rows.isEmpty()) {
-            return buildFallbackResponse(limit, "요청하신 조건과 일치하는 시터가 아직 부족해, 평점이 높은 인기 시터를 추천드릴게요.");
+            SitterRecommendResponse fallback = buildFallbackResponse(limit, "요청하신 조건과 일치하는 시터가 아직 부족해, 평점이 높은 인기 시터를 추천드릴게요.");
+            return recommendationLlmService.enhance(fallback, parent, params, additionalRequest, email);
         }
 
         List<SitterRecommendItem> items = new ArrayList<>();
@@ -115,13 +122,16 @@ public class SitterRecommendationService {
             if (items.size() >= limit) break;
         }
 
-        return new SitterRecommendResponse(
+        SitterRecommendResponse algorithmResponse = new SitterRecommendResponse(
                 summary,
                 items.size(),
                 matchMode,
                 items,
-                "AI 추천은 참고용이며, 최종 선택은 부모님께 있습니다."
+                "AI 추천은 참고용이며, 최종 선택은 부모님께 있습니다.",
+                "ALGORITHM",
+                false
         );
+        return recommendationLlmService.enhance(algorithmResponse, parent, params, additionalRequest, email);
     }
 
     // ========================
@@ -273,7 +283,9 @@ public class SitterRecommendationService {
                 items.size(),
                 "FALLBACK_TOP_SCORE",
                 items,
-                "AI 추천은 참고용이며, 최종 선택은 부모님께 있습니다."
+                "AI 추천은 참고용이며, 최종 선택은 부모님께 있습니다.",
+                "ALGORITHM",
+                false
         );
     }
 

@@ -364,6 +364,9 @@ export function AiSitterRecommendPanel({ session, onToast, onPickSitter, onViewD
 
           {loading ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <p style={{ fontSize: 13, color: 'rgba(26,21,35,0.66)', margin: 0 }}>
+                AI가 조건을 분석하고 맞춤 추천을 준비하고 있어요. 잠시만 기다려 주세요...
+              </p>
               {Array.from({ length: 3 }).map((_, idx) => (
                 <div className="skeletonCard" key={idx}>
                   <div className="skeletonLine" style={{ width: '30%', marginBottom: 10 }} />
@@ -381,6 +384,22 @@ export function AiSitterRecommendPanel({ session, onToast, onPickSitter, onViewD
 
               {result.summary ? (
                 <div>
+                  {result.llmFallback ? (
+                    <div
+                      style={{
+                        padding: 10,
+                        borderRadius: 12,
+                        marginBottom: 10,
+                        background: 'rgba(56, 189, 248, 0.12)',
+                        border: '1px solid rgba(56, 189, 248, 0.28)',
+                        fontSize: 12,
+                        lineHeight: 1.5,
+                        color: '#0c4a6e'
+                      }}
+                    >
+                      AI 분석 연결에 문제가 있어 기본 추천 결과로 보여드릴게요.
+                    </div>
+                  ) : null}
                   <div
                     style={{
                       padding: 12,

@@ -49,6 +49,18 @@ reservation:
     # 락 자동 해제 시간(초)입니다.
     lease-seconds: 10
 
+# OpenAI LLM 연동 설정입니다.
+ai:
+  enabled: true
+  provider: openai
+  api-key: ${BASISI_OPENAI_API_KEY:}
+  model: gpt-4o-mini
+  base-url: https://api.openai.com/v1
+  timeout-ms: 15000
+  max-retries: 0
+  cache-ttl-minutes: 30
+  rate-limit-per-user-per-minute: 2
+
 # 비동기 이벤트 파이프라인(Kafka) 설정입니다.
 async:
   events:

@@ -359,6 +359,21 @@ function AiRecommendedSittersPreview({ onPickSitter, onViewDetail, onToast, isPa
         <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginTop: 4 }}>
           {data?.summary || '마이페이지에 등록된 부모·아이 프로필을 기반으로 AI가 어울리는 시터를 골라드려요.'}
         </div>
+        {data?.llmFallback ? (
+          <div
+            style={{
+              marginTop: 8,
+              padding: '8px 10px',
+              borderRadius: 10,
+              background: 'rgba(56, 189, 248, 0.12)',
+              border: '1px solid rgba(56, 189, 248, 0.28)',
+              fontSize: 11,
+              color: '#0c4a6e'
+            }}
+          >
+            AI 분석 연결에 문제가 있어 기본 추천 결과로 보여드릴게요.
+          </div>
+        ) : null}
       </div>
 
       <div
@@ -389,6 +404,9 @@ function AiRecommendedSittersPreview({ onPickSitter, onViewDetail, onToast, isPa
         </div>
       ) : loading ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <p style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', margin: 0 }}>
+            AI가 프로필을 분석해 추천 시터를 고르고 있어요...
+          </p>
           {Array.from({ length: 3 }).map((_, idx) => (
             <div className="skeletonCard" key={idx}>
               <div className="skeletonLine" style={{ width: '40%', marginBottom: 10 }} />
