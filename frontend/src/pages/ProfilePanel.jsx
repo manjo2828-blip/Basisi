@@ -100,6 +100,9 @@ export function ProfilePanel({ session, onAuthChanged, onToast }) {
             onToast={onToast}
             onAuthChanged={onAuthChanged}
             onSaved={() => setSitterSaveNonce((n) => n + 1)}
+            displayName={session?.displayName || session?.name || session?.email}
+            flameScore={mySitterScore?.score}
+            flameGrade={mySitterScore?.grade}
           />
         </>
       ) : (

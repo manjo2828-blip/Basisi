@@ -1,6 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TextInput } from '../components/TextInput.jsx';
 import { Select } from '../components/Select.jsx';
+import { SitterProfilePreviewCard } from '../components/SitterProfilePreviewCard.jsx';
+import { ProfilePhotoFrame } from '../components/ProfilePhotoFrame.jsx';
 import { ApiError } from '../lib/api.js';
 import {
   deleteMySitterProfile,
@@ -23,11 +25,17 @@ const TABS = [
   { id: 'REG', label: '희망 지역' },
   { id: 'AGE', label: '선호 연령' },
   { id: 'IMG', label: '프로필 사진' },
-  { id: 'BIO', label: '자기소개' }
+  { id: 'BIO', label: '자기소개' },
+  { id: 'PREVIEW', label: '내 프로필 보기' }
 ];
 
 function emptyRegion() {
   return { sido: '', sigungu: '', dong: '' };
+}
+
+function isImageFile(file) {
+  if (file?.type?.startsWith('image/')) return true;
+  return /\.(jpe?g|png|gif|webp|bmp)$/i.test(file?.name || '');
 }
 
 function applyServer(setters, res) {
@@ -68,7 +76,7 @@ function applyServer(setters, res) {
   setPhotoIds(Array.isArray(res?.profilePhotoIds) ? [...res.profilePhotoIds] : []);
 }
 
-export function SitterProfileEditor({ onToast, onAuthChanged, onSaved }) {
+export function SitterProfileEditor({ onToast, onAuthChanged, onSaved, displayName, flameScore, flameGrade }) {
   const [tab, setTab] = useState('BASIC');
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState('');
@@ -89,6 +97,16 @@ export function SitterProfileEditor({ onToast, onAuthChanged, onSaved }) {
   const [preferredRegions, setPreferredRegions] = useState([emptyRegion()]);
   const [ageGroups, setAgeGroups] = useState([]);
   const [photoIds, setPhotoIds] = useState([]);
+  const [uploadingPhotos, setUploadingPhotos] = useState(0);
+  const [pendingPreviews, setPendingPreviews] = useState([]);
+  const pendingUrlsRef = useRef([]);
+  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      pendingUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, []);
 
   const reload = useCallback(async () => {
     setLoadError('');
@@ -128,7 +146,7 @@ export function SitterProfileEditor({ onToast, onAuthChanged, onSaved }) {
     reload();
   }, [reload]);
 
-  const buildPayload = useCallback(() => {
+  const buildPayload = useCallback((overridePhotoIds) => {
     const regions = preferredRegions
       .filter((r) => (r.sido || '').trim() && (r.sigungu || '').trim() && (r.dong || '').trim())
       .map((r) => ({ sido: r.sido.trim(), sigungu: r.sigungu.trim(), dong: r.dong.trim() }));
@@ -151,7 +169,7 @@ export function SitterProfileEditor({ onToast, onAuthChanged, onSaved }) {
       cctvConsent: cctvVal,
       preferredRegions: regions,
       preferredAgeGroups: ageGroups,
-      profilePhotoIds: photoIds
+      profilePhotoIds: overridePhotoIds ?? photoIds
     };
   }, [phone, bio, age, gender, years, hasCert, region, nationality, activities, wage, hourlyNegotiable, cctv, preferredRegions, ageGroups, photoIds]);
 
@@ -183,6 +201,53 @@ export function SitterProfileEditor({ onToast, onAuthChanged, onSaved }) {
     if (tabId === 'BIO' && bio.length > 2000) return '자기소개는 2000자 이하여야 합니다.';
     return '';
   };
+
+  const canPersistProfile = useCallback(() => {
+    const tabs = ['BASIC', 'NAT', 'ACT', 'WAGE', 'CCTV', 'REG', 'AGE', 'BIO'];
+    return tabs.every((tabId) => !validateForTab(tabId));
+  }, [phone, bio, age, gender, years, hasCert, region, nationality, activities, wage, hourlyNegotiable, cctv, preferredRegions, ageGroups]);
+
+  const persistProfile = useCallback(
+    async (overridePhotoIds, { silent = false } = {}) => {
+      if (!canPersistProfile()) return false;
+      try {
+        const res = await upsertMySitterProfile(buildPayload(overridePhotoIds));
+        applyServer(
+          {
+            setPhone,
+            setBio,
+            setAge,
+            setGender,
+            setYears,
+            setHasCert,
+            setRegion,
+            setNationality,
+            setActivities,
+            setWage,
+            setHourlyNegotiable,
+            setCctv,
+            setPreferredRegions,
+            setAgeGroups,
+            setPhotoIds
+          },
+          res
+        );
+        onAuthChanged?.();
+        onSaved?.();
+        if (!silent) {
+          onToast?.({ type: 'success', title: '저장', message: '시터 프로필이 저장되었습니다.' });
+        }
+        return true;
+      } catch (e) {
+        if (!silent) {
+          const msg = e instanceof ApiError ? e.message : '저장 중 오류가 발생했습니다.';
+          onToast?.({ type: 'error', title: '저장 실패', message: msg });
+        }
+        return false;
+      }
+    },
+    [buildPayload, canPersistProfile, onAuthChanged, onSaved, onToast]
+  );
 
   const commit = async () => {
     const err = validateForTab(tab);
@@ -306,20 +371,67 @@ export function SitterProfileEditor({ onToast, onAuthChanged, onSaved }) {
   );
 
   const onPickPhotos = async (e) => {
-    const files = e.target.files;
+    const input = e.target;
+    const files = input.files;
     if (!files?.length) return;
-    e.target.value = '';
+
+    const initialCount = photoIds.length;
+    let nextIds = [...photoIds];
+    let localPending = pendingPreviews.length;
+
     for (const file of Array.from(files)) {
-      if (photoIds.length >= 5) {
+      if (nextIds.length + localPending >= 5) {
         onToast?.({ type: 'error', title: '제한', message: '사진은 최대 5장입니다.' });
         break;
       }
+      if (!isImageFile(file)) {
+        onToast?.({ type: 'error', title: '업로드', message: '이미지 파일(jpg, png 등)만 선택할 수 있습니다.' });
+        continue;
+      }
+      if (file.size > 1_500_000) {
+        onToast?.({ type: 'error', title: '업로드', message: '이미지는 1.5MB 이하만 업로드할 수 있습니다.' });
+        continue;
+      }
+
+      const localUrl = URL.createObjectURL(file);
+      pendingUrlsRef.current.push(localUrl);
+      const previewKey = `${file.name}-${Date.now()}-${Math.random()}`;
+      localPending += 1;
+      setPendingPreviews((prev) => [...prev, { key: previewKey, localUrl, name: file.name }]);
+      setUploadingPhotos((n) => n + 1);
+
       try {
         const res = await uploadSitterProfileImage(file);
-        if (res?.id) setPhotoIds((p) => [...p, res.id]);
+        if (res?.id) {
+          nextIds = [...nextIds, res.id];
+          setPhotoIds(nextIds);
+        } else {
+          onToast?.({ type: 'error', title: '업로드', message: '서버 응답 형식이 올바르지 않습니다.' });
+        }
       } catch (err) {
         const msg = err instanceof ApiError ? err.message : '업로드 실패';
         onToast?.({ type: 'error', title: '업로드', message: msg });
+      } finally {
+        localPending = Math.max(0, localPending - 1);
+        setUploadingPhotos((n) => Math.max(0, n - 1));
+        setPendingPreviews((prev) => prev.filter((p) => p.key !== previewKey));
+        URL.revokeObjectURL(localUrl);
+        pendingUrlsRef.current = pendingUrlsRef.current.filter((u) => u !== localUrl);
+      }
+    }
+
+    input.value = '';
+
+    if (nextIds.length > initialCount) {
+      const saved = await persistProfile(nextIds, { silent: true });
+      if (saved) {
+        onToast?.({ type: 'success', title: '사진 저장', message: '프로필 사진이 등록되었습니다. 「내 프로필 보기」에서 확인하세요.' });
+      } else {
+        onToast?.({
+          type: 'info',
+          title: '사진 업로드',
+          message: '사진은 올라갔어요. 다른 필수 항목을 채운 뒤 [저장]을 눌러 프로필에 반영해주세요.'
+        });
       }
     }
   };
@@ -330,7 +442,9 @@ export function SitterProfileEditor({ onToast, onAuthChanged, onSaved }) {
     } catch (err) {
       // 서버에 없어도 UI에서 제거
     }
-    setPhotoIds((p) => p.filter((x) => x !== id));
+    const nextIds = photoIds.filter((x) => x !== id);
+    setPhotoIds(nextIds);
+    await persistProfile(nextIds, { silent: true });
   };
 
   return (
@@ -519,23 +633,109 @@ export function SitterProfileEditor({ onToast, onAuthChanged, onSaved }) {
       {tab === 'IMG' ? (
         <div>
           <div style={{ fontWeight: 800, marginBottom: 8 }}>프로필 사진 (최대 5장)</div>
-          <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 10 }}>증명사진 또는 본인/돌봄 관련 사진을 올려주세요. (jpg/png 등)</div>
-          <input type="file" accept="image/*" multiple onChange={onPickPhotos} disabled={photoIds.length >= 5} />
-          <div style={{ fontSize: 12, marginTop: 8 }}>{photoIds.length} / 5</div>
-          <div className="row" style={{ flexWrap: 'wrap', gap: 10, marginTop: 12 }}>
-            {photoIds.map((id) => (
-              <div key={id} style={{ position: 'relative' }}>
-                <img
-                  src={getSitterProfileImageUrl(id)}
-                  alt="프로필"
-                  style={{ width: 96, height: 96, objectFit: 'cover', borderRadius: 12, border: '1px solid rgba(0,0,0,0.08)' }}
-                />
-                <button type="button" className="btn" style={{ marginTop: 4, fontSize: 11 }} onClick={() => removePhoto(id)}>
+          <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 10 }}>
+            PC에 있는 사진을 선택하면 바로 미리보기가 뜹니다. (jpg/png, 1.5MB 이하)
+          </div>
+          <button
+            type="button"
+            className="btn primary"
+            disabled={photoIds.length + pendingPreviews.length >= 5 || uploadingPhotos > 0}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            {uploadingPhotos > 0 ? '업로드 중...' : '사진 선택'}
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/gif,image/webp,image/bmp,.jpg,.jpeg,.png,.gif,.webp,.bmp"
+            multiple
+            onChange={onPickPhotos}
+            style={{ display: 'none' }}
+          />
+          <div style={{ fontSize: 12, marginTop: 8 }}>
+            {photoIds.length + pendingPreviews.length} / 5
+            {photoIds.length > 0 ? (
+              <span style={{ marginLeft: 8, color: 'rgba(26,21,35,0.52)' }}>첫 번째 사진이 대표 프로필 사진(3:4)입니다.</span>
+            ) : null}
+          </div>
+
+          {(photoIds.length > 0 || pendingPreviews.length > 0) && photoIds[0] ? (
+            <div style={{ marginTop: 16, marginBottom: 12 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: 'rgba(199, 61, 106, 0.85)', marginBottom: 6 }}>대표 사진</div>
+              <div style={{ display: 'inline-block', position: 'relative' }}>
+                <ProfilePhotoFrame src={getSitterProfileImageUrl(photoIds[0])} alt="대표 프로필" size="hero" border="accent" />
+                <button
+                  type="button"
+                  className="btn"
+                  style={{ marginTop: 6, fontSize: 11, width: '100%' }}
+                  onClick={() => removePhoto(photoIds[0])}
+                >
+                  삭제
+                </button>
+              </div>
+            </div>
+          ) : null}
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 12, alignItems: 'flex-end' }}>
+            {pendingPreviews.map((p) => (
+              <div key={p.key}>
+                <ProfilePhotoFrame src={p.localUrl} alt={p.name} size="md" border="dashed" dimmed />
+                <div style={{ fontSize: 10, marginTop: 4, color: 'rgba(26,21,35,0.52)', textAlign: 'center' }}>업로드 중...</div>
+              </div>
+            ))}
+            {photoIds.slice(photoIds[0] ? 1 : 0).map((id) => (
+              <div key={id}>
+                <ProfilePhotoFrame src={getSitterProfileImageUrl(id)} alt="프로필" size="md" />
+                <button type="button" className="btn" style={{ marginTop: 4, fontSize: 11, width: '100%' }} onClick={() => removePhoto(id)}>
                   삭제
                 </button>
               </div>
             ))}
           </div>
+          {photoIds.length === 0 && pendingPreviews.length === 0 ? (
+            <div
+              style={{
+                marginTop: 14,
+                padding: 20,
+                borderRadius: 12,
+                border: '1px dashed rgba(199, 61, 106, 0.28)',
+                textAlign: 'center',
+                fontSize: 12,
+                color: 'rgba(26,21,35,0.52)'
+              }}
+            >
+              아직 등록된 사진이 없습니다.
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
+      {tab === 'PREVIEW' ? (
+        <div>
+          <div style={{ fontWeight: 800, marginBottom: 8 }}>내 프로필 미리보기</div>
+          <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 12 }}>
+            부모님에게 보이는 형태와 비슷하게 미리 확인할 수 있어요. 사진·정보 수정 후 [저장] 또는 사진 업로드로 반영됩니다.
+          </div>
+          <SitterProfilePreviewCard
+            displayName={displayName}
+            phone={phone}
+            age={age}
+            gender={gender}
+            years={years}
+            hasCert={hasCert}
+            region={region}
+            bio={bio}
+            nationality={nationality}
+            activities={activities}
+            wage={wage}
+            hourlyNegotiable={hourlyNegotiable}
+            cctv={cctv}
+            preferredRegions={preferredRegions}
+            ageGroups={ageGroups}
+            photoIds={photoIds}
+            flameScore={flameScore}
+            flameGrade={flameGrade}
+          />
         </div>
       ) : null}
 

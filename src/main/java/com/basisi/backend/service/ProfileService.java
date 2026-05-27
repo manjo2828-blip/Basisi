@@ -333,10 +333,10 @@ public class ProfileService {
         if (file.getSize() > 1_500_000L) {
             throw new IllegalArgumentException("이미지는 1.5MB 이하만 업로드할 수 있습니다.");
         }
-        String contentType = file.getContentType();
-        if (contentType == null || !contentType.startsWith("image/")) {
+        if (!isAllowedImageUpload(file)) {
             throw new IllegalArgumentException("이미지 파일만 업로드할 수 있습니다.");
         }
+        String contentType = resolveImageContentType(file);
         String email = SecurityUtil.getCurrentUserEmail();
         User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
@@ -528,5 +528,39 @@ public class ProfileService {
                 .orElseThrow(() -> new IllegalArgumentException("삭제할 시터 프로필이 존재하지 않습니다."));
         sitterProfileImageRepository.deleteByUserId(user.getId());
         sitterProfileRepository.delete(profile);
+    }
+
+    private static boolean isAllowedImageUpload(MultipartFile file) {
+        String contentType = file.getContentType();
+        if (contentType != null && contentType.startsWith("image/")) {
+            return true;
+        }
+        String name = file.getOriginalFilename();
+        return name != null && name.matches("(?i).+\\.(jpg|jpeg|png|gif|webp|bmp)$");
+    }
+
+    private static String resolveImageContentType(MultipartFile file) {
+        String contentType = file.getContentType();
+        if (contentType != null && contentType.startsWith("image/")) {
+            return contentType;
+        }
+        String name = file.getOriginalFilename();
+        if (name == null) {
+            return "image/jpeg";
+        }
+        String lower = name.toLowerCase();
+        if (lower.endsWith(".png")) {
+            return "image/png";
+        }
+        if (lower.endsWith(".gif")) {
+            return "image/gif";
+        }
+        if (lower.endsWith(".webp")) {
+            return "image/webp";
+        }
+        if (lower.endsWith(".bmp")) {
+            return "image/bmp";
+        }
+        return "image/jpeg";
     }
 }
