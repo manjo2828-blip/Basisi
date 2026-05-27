@@ -1,0 +1,275 @@
+/* ============================================================
+   AccountPanel — 회원 정보 수정 (코랄 톤)
+   - 모든 선택자는 .basisi-account 스코프
+   - 전역 .btn / .field / .row / .divider / .badge / .error 룰을
+     이 스코프 안에서 재정의
+   ============================================================ */
+
+.basisi-account {
+  --bac-coral: #ff6b6b;
+  --bac-coral-light: #ff8e8e;
+  --bac-coral-pale: #fff0f0;
+  --bac-coral-mid: #ffd6d6;
+  --bac-dark: #1a1a2e;
+  --bac-gray: #6b7280;
+  --bac-light-gray: #f8f8fa;
+  --bac-border: #f0e8e8;
+  --bac-white: #ffffff;
+  --bac-danger: #c53030;
+  --bac-danger-bg: #fff5f5;
+  --bac-danger-border: #fed7d7;
+
+  background: linear-gradient(135deg, #fff 55%, #fff5f5 100%);
+  padding: 4rem 5%;
+  min-height: calc(100vh - 80px);
+  margin: -22px 0 -60px;
+  font-family: 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--bac-dark);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.basisi-account * { box-sizing: border-box; }
+
+/* ───── 외곽 카드 (비율 유지·확대) ───── */
+.basisi-account .bac-shell {
+  width: 100%;
+  max-width: 880px;
+  background: var(--bac-white);
+  border-radius: 32px;
+  padding: 4rem 3.6rem 3.25rem;
+  box-shadow:
+    0 28px 72px rgba(255, 107, 107, 0.12),
+    0 6px 22px rgba(0, 0, 0, 0.05);
+  border: 1.5px solid var(--bac-border);
+  animation: bac-fade-up 0.5s ease both;
+}
+
+@keyframes bac-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .basisi-account .bac-shell { animation: none; }
+}
+
+/* ───── 페이지 헤더 ───── */
+.basisi-account .bac-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.basisi-account .bac-title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: -0.9px;
+  color: var(--bac-dark);
+  margin: 0 0 0.55rem;
+}
+
+.basisi-account .bac-subtitle {
+  font-size: 1.05rem;
+  color: var(--bac-gray);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ───── 탭 행 (중앙 정렬 알약) ───── */
+.basisi-account .bac-tab-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 1.75rem;
+}
+
+/* ───── 전역 row/divider 재정의 ───── */
+.basisi-account .row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.basisi-account .divider {
+  border-top: 1px solid var(--bac-border);
+  margin: 1.75rem 0;
+  height: 0;
+}
+
+/* ───── 전역 .btn 재정의 ───── */
+.basisi-account .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.75rem 1.6rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--bac-border);
+  background: var(--bac-white);
+  color: var(--bac-dark);
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: -0.2px;
+  transition: background-color 180ms, border-color 180ms, color 180ms, box-shadow 180ms, transform 180ms;
+  line-height: 1.3;
+}
+
+.basisi-account .btn:hover:not(:disabled) {
+  border-color: var(--bac-coral-mid);
+  color: var(--bac-coral);
+}
+
+.basisi-account .btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: var(--bac-light-gray);
+  color: var(--bac-gray);
+}
+
+.basisi-account .btn.primary {
+  background: var(--bac-coral);
+  border-color: var(--bac-coral);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(255, 107, 107, 0.3);
+}
+
+.basisi-account .btn.primary:hover:not(:disabled) {
+  background: var(--bac-coral-light);
+  border-color: var(--bac-coral-light);
+  color: #fff;
+  box-shadow: 0 10px 28px rgba(255, 107, 107, 0.4);
+  transform: translateY(-1px);
+}
+
+.basisi-account .btn.lg {
+  padding: 1.1rem 2.6rem;
+  font-size: 1.2rem;
+}
+
+/* ───── 전역 .field 재정의 ───── */
+.basisi-account .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 1.15rem;
+}
+
+.basisi-account .field > label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bac-gray);
+  padding-left: 4px;
+}
+
+.basisi-account .field input {
+  width: 100%;
+  padding: 1.05rem 1.35rem;
+  font-size: 1.1rem;
+  border: 1.5px solid var(--bac-border);
+  border-radius: 14px;
+  background: var(--bac-light-gray);
+  color: var(--bac-dark);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 180ms, background-color 180ms, box-shadow 180ms;
+}
+
+.basisi-account .field input::placeholder { color: #c4c8d0; }
+
+.basisi-account .field input:hover:not(:disabled) { border-color: var(--bac-coral-mid); }
+
+.basisi-account .field input:focus {
+  border-color: var(--bac-coral);
+  background: var(--bac-white);
+  box-shadow: 0 0 0 5px rgba(255, 107, 107, 0.12);
+}
+
+.basisi-account .field input:disabled { opacity: 0.65; cursor: not-allowed; }
+
+/* ───── 전역 .badge 재정의 ───── */
+.basisi-account .badge {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: var(--bac-coral-pale);
+  color: var(--bac-coral);
+  border: 1.5px solid var(--bac-coral-mid);
+  letter-spacing: 0.2px;
+}
+
+/* ───── 전역 .error 재정의 ───── */
+.basisi-account .error {
+  background: var(--bac-danger-bg);
+  color: var(--bac-danger);
+  border: 1.5px solid var(--bac-danger-border);
+  border-radius: 14px;
+  padding: 0.95rem 1.25rem;
+  font-size: 1rem;
+  margin: 0 0 16px;
+  line-height: 1.55;
+  text-align: left;
+}
+
+/* ───── 현재 정보 안내 (아이디·이메일 표시) ───── */
+.basisi-account .bac-info {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--bac-gray);
+  margin: 0 0 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.basisi-account .bac-info-label { font-weight: 600; }
+
+/* ───── 안내 텍스트 ───── */
+.basisi-account .bac-help {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--bac-gray);
+  margin: 0.4rem 0 1.25rem;
+  line-height: 1.55;
+}
+
+/* ───── 저장 CTA 행 ───── */
+.basisi-account .bac-cta-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+/* ───── 반응형 ───── */
+@media (max-width: 960px) {
+  .basisi-account .bac-shell {
+    max-width: 720px;
+    padding: 3.25rem 2.5rem 2.75rem;
+  }
+  .basisi-account .bac-title { font-size: 1.9rem; }
+  .basisi-account .bac-subtitle { font-size: 1rem; }
+  .basisi-account .field input { font-size: 1.05rem; padding: 0.95rem 1.2rem; }
+  .basisi-account .btn { font-size: 1rem; padding: 0.7rem 1.45rem; }
+  .basisi-account .btn.lg { font-size: 1.1rem; padding: 1rem 2.3rem; }
+}
+
+@media (max-width: 620px) {
+  .basisi-account { padding: 2.25rem 1rem 2.75rem; }
+  .basisi-account .bac-shell { padding: 2.25rem 1.4rem 1.9rem; border-radius: 22px; }
+  .basisi-account .bac-title { font-size: 1.55rem; }
+  .basisi-account .bac-subtitle { font-size: 0.95rem; }
+  .basisi-account .bac-tab-row { justify-content: flex-start; gap: 8px; }
+  .basisi-account .btn { font-size: 0.95rem; padding: 0.65rem 1.3rem; }
+  .basisi-account .btn.lg { width: 100%; }
+  .basisi-account .field input { font-size: 1rem; padding: 0.9rem 1.1rem; }
+}

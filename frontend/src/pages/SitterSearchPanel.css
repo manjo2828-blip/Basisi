@@ -1,0 +1,489 @@
+/* ============================================================
+   SitterSearchPanel — 시터 탐색 (코랄 톤 · 메인 디자인 언어)
+   - 모든 선택자는 .basisi-search 스코프
+   - 전역 .btn / .field / .row / .divider / .badge / .error / .emptyState /
+     .skeletonCard / .skeletonLine 룰은 이 스코프 안에서 재정의
+   ============================================================ */
+
+.basisi-search {
+  --bs-coral: #ff6b6b;
+  --bs-coral-light: #ff8e8e;
+  --bs-coral-pale: #fff0f0;
+  --bs-coral-mid: #ffd6d6;
+  --bs-dark: #1a1a2e;
+  --bs-gray: #6b7280;
+  --bs-light-gray: #f8f8fa;
+  --bs-border: #f0e8e8;
+  --bs-white: #ffffff;
+  --bs-info: #0c4a6e;
+  --bs-info-bg: #e0f2fe;
+  --bs-info-border: #bae6fd;
+  --bs-danger: #c53030;
+  --bs-danger-bg: #fff5f5;
+  --bs-danger-border: #fed7d7;
+
+  background: linear-gradient(135deg, #fff 55%, #fff5f5 100%);
+  padding: 3rem 5%;
+  min-height: calc(100vh - 80px);
+  margin: -22px 0 -60px;
+  font-family: 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--bs-dark);
+}
+
+.basisi-search * { box-sizing: border-box; }
+
+/* ───── 외곽 카드 ───── */
+.basisi-search .bs-shell {
+  max-width: 980px;
+  margin: 0 auto;
+  background: var(--bs-white);
+  border-radius: 28px;
+  padding: 2.5rem 2.25rem 2rem;
+  box-shadow:
+    0 20px 60px rgba(255, 107, 107, 0.1),
+    0 4px 18px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--bs-border);
+  animation: bs-fade-up 0.5s ease both;
+}
+
+@keyframes bs-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .basisi-search .bs-shell { animation: none; }
+}
+
+/* ───── 페이지 헤더 ───── */
+.basisi-search .bs-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.basisi-search .bs-title {
+  font-size: clamp(1.85rem, 2.8vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: var(--bs-dark);
+  margin: 0 0 0.55rem;
+}
+
+.basisi-search .bs-subtitle {
+  font-size: 1.05rem;
+  color: var(--bs-gray);
+  margin: 0;
+  line-height: 1.55;
+}
+
+.basisi-search .bs-role-hint {
+  text-align: center;
+  font-size: 0.92rem;
+  color: var(--bs-gray);
+  margin: -0.5rem 0 1rem;
+  padding: 0.55rem 1.05rem;
+  background: var(--bs-light-gray);
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.basisi-search .bs-role-hint-wrap {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* ───── 전역 row/divider/badge/error/emptyState/skeleton 재정의 ───── */
+.basisi-search .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.basisi-search .divider {
+  border-top: 1px solid var(--bs-border);
+  margin: 1.5rem 0;
+  height: 0;
+}
+
+.basisi-search .badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  background: var(--bs-coral-pale);
+  color: var(--bs-coral);
+  border: 1px solid var(--bs-coral-mid);
+  letter-spacing: 0.2px;
+}
+
+.basisi-search .error {
+  background: var(--bs-danger-bg);
+  color: var(--bs-danger);
+  border: 1px solid var(--bs-danger-border);
+  border-radius: 12px;
+  padding: 0.85rem 1.15rem;
+  font-size: 1rem;
+  line-height: 1.55;
+  margin: 0.5rem 0 0;
+}
+
+.basisi-search .emptyState {
+  margin-top: 12px;
+  padding: 2.25rem 1.75rem;
+  border-radius: 14px;
+  border: 1.5px dashed var(--bs-coral-mid);
+  text-align: center;
+  font-size: 1.05rem;
+  color: var(--bs-gray);
+  background: var(--bs-coral-pale);
+  line-height: 1.6;
+}
+
+.basisi-search .skeletonCard {
+  background: var(--bs-white);
+  border: 1px solid var(--bs-border);
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+}
+
+.basisi-search .skeletonLine {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f5f5f7 0%, #ececef 50%, #f5f5f7 100%);
+  background-size: 200% 100%;
+  animation: bs-shimmer 1.4s linear infinite;
+}
+
+@keyframes bs-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ───── 전역 .btn 재정의 (.basisi-profile 과 동일한 토큰) ───── */
+.basisi-search .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--bs-border);
+  background: var(--bs-white);
+  color: var(--bs-dark);
+  font-size: 1.02rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: -0.2px;
+  transition: background-color 180ms, border-color 180ms, color 180ms, box-shadow 180ms, transform 180ms;
+  line-height: 1.3;
+}
+
+.basisi-search .btn:hover:not(:disabled) {
+  border-color: var(--bs-coral-mid);
+  color: var(--bs-coral);
+}
+
+.basisi-search .btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: var(--bs-light-gray);
+  color: var(--bs-gray);
+}
+
+.basisi-search .btn.primary {
+  background: var(--bs-coral);
+  border-color: var(--bs-coral);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(255, 107, 107, 0.28);
+}
+
+.basisi-search .btn.primary:hover:not(:disabled) {
+  background: var(--bs-coral-light);
+  border-color: var(--bs-coral-light);
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(255, 107, 107, 0.36);
+  transform: translateY(-1px);
+}
+
+.basisi-search .btn.accent {
+  background: var(--bs-coral-pale);
+  border-color: var(--bs-coral-mid);
+  color: var(--bs-coral);
+  font-weight: 700;
+}
+
+.basisi-search .btn.accent:hover:not(:disabled) {
+  background: var(--bs-coral-mid);
+  border-color: var(--bs-coral);
+}
+
+.basisi-search .btn.lg {
+  padding: 1rem 2.4rem;
+  font-size: 1.15rem;
+}
+
+/* ───── 전역 .field 재정의 ─────
+   주의: TextInput/Select 컴포넌트가 이미 <div class="field">로 감쌉니다.
+   .bs-form-row 내부에서는 margin/flex 행에 영향을 주지 않도록 재정의합니다. */
+.basisi-search .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.basisi-search .field > label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bs-gray);
+  padding-left: 4px;
+}
+
+.basisi-search .field input,
+.basisi-search .field select {
+  width: 100%;
+  padding: 0.9rem 1.15rem;
+  font-size: 1.05rem;
+  border: 1.5px solid var(--bs-border);
+  border-radius: 12px;
+  background: var(--bs-light-gray);
+  color: var(--bs-dark);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 180ms, background-color 180ms, box-shadow 180ms;
+}
+
+.basisi-search .field input::placeholder { color: #c4c8d0; }
+
+.basisi-search .field input:hover:not(:disabled),
+.basisi-search .field select:hover:not(:disabled) {
+  border-color: var(--bs-coral-mid);
+}
+
+.basisi-search .field input:focus,
+.basisi-search .field select:focus {
+  border-color: var(--bs-coral);
+  background: var(--bs-white);
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.12);
+}
+
+/* select 화살표 */
+.basisi-search .field select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+
+/* ───── 검색 폼 (컴팩트 세로 흐름) ───── */
+.basisi-search .bs-form {
+  margin-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.basisi-search .bs-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+/* 지역 한 줄 풀폭 */
+.basisi-search .bs-form-row-full > .field {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+/* 정렬 + 페이지 크기 2열 */
+.basisi-search .bs-form-row-2 > .field {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.basisi-search .bs-form-cta {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* AI 추천 시터로 돌아가기 보조 버튼 */
+.basisi-search .bs-back-ai {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.85rem 1.45rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--bs-info-border);
+  background: var(--bs-info-bg);
+  color: var(--bs-info);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 180ms, box-shadow 180ms;
+  letter-spacing: -0.2px;
+}
+
+.basisi-search .bs-back-ai:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(56, 189, 248, 0.18);
+}
+
+.basisi-search .bs-back-ai:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* ───── 결과 섹션 헤더 ───── */
+.basisi-search .bs-result-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.1rem;
+}
+
+.basisi-search .bs-result-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: var(--bs-dark);
+  margin: 0 6px 0 0;
+}
+
+.basisi-search .bs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ───── 페이지 네비게이션 ───── */
+.basisi-search .bs-pager {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* ───── AI 추천 섹션 ───── */
+.basisi-search .bs-ai-section {
+  margin-top: 0.25rem;
+}
+
+.basisi-search .bs-ai-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--bs-dark);
+  letter-spacing: -0.4px;
+  margin-bottom: 8px;
+}
+
+.basisi-search .bs-ai-head .badge { font-size: 0.82rem; }
+
+.basisi-search .bs-ai-head .badge.is-info {
+  background: var(--bs-info-bg);
+  color: var(--bs-info);
+  border-color: var(--bs-info-border);
+}
+
+.basisi-search .bs-ai-sub {
+  font-size: 1rem;
+  color: var(--bs-gray);
+  line-height: 1.6;
+  margin: 0 0 1rem;
+}
+
+.basisi-search .bs-ai-notice {
+  margin-top: 10px;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: var(--bs-info-bg);
+  border: 1px solid var(--bs-info-border);
+  font-size: 0.92rem;
+  color: var(--bs-info);
+  line-height: 1.55;
+}
+
+.basisi-search .bs-ai-banner {
+  border: 1.5px dashed var(--bs-coral-mid);
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--bs-coral-pale) 0%, #fffaf6 100%);
+  margin: 0.5rem 0 1.1rem;
+  font-size: 1rem;
+  color: var(--bs-dark);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  line-height: 1.55;
+}
+
+.basisi-search .bs-ai-banner strong { color: var(--bs-coral); font-weight: 800; }
+
+.basisi-search .bs-ai-loading-text {
+  font-size: 0.98rem;
+  color: var(--bs-gray);
+  margin: 0 0 6px;
+  line-height: 1.55;
+}
+
+.basisi-search .bs-ai-disclaimer {
+  margin-top: 14px;
+  font-size: 0.88rem;
+  color: var(--bs-gray);
+  text-align: center;
+  line-height: 1.55;
+}
+
+.basisi-search .bs-ai-empty-hint {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--bs-gray);
+  padding: 1.75rem 0;
+  line-height: 1.6;
+}
+
+/* ───── 반응형 ───── */
+@media (max-width: 960px) {
+  .basisi-search .bs-shell { padding: 2.25rem 1.75rem 1.75rem; }
+  .basisi-search .bs-title { font-size: 1.75rem; }
+  .basisi-search .bs-ai-head { font-size: 1.2rem; }
+  .basisi-search .bs-result-title { font-size: 1.25rem; }
+  .basisi-search .btn { font-size: 0.96rem; padding: 0.65rem 1.25rem; }
+  .basisi-search .btn.lg { font-size: 1.05rem; padding: 0.9rem 2rem; }
+  .basisi-search .field input,
+  .basisi-search .field select { font-size: 1rem; padding: 0.8rem 1.05rem; }
+}
+
+@media (max-width: 760px) {
+  .basisi-search { padding: 2rem 4%; }
+  .basisi-search .bs-shell { padding: 1.75rem 1.25rem 1.5rem; border-radius: 22px; }
+  .basisi-search .bs-title { font-size: 1.55rem; }
+  .basisi-search .bs-subtitle { font-size: 0.98rem; }
+  .basisi-search .bs-form { gap: 12px; }
+  .basisi-search .bs-form-row { gap: 10px; }
+  .basisi-search .bs-form-row-2 > .field { flex: 1 1 100%; }
+  .basisi-search .bs-form-cta { flex-direction: column; align-items: stretch; }
+  .basisi-search .bs-form-cta .btn,
+  .basisi-search .bs-form-cta .bs-back-ai { width: 100%; justify-content: center; }
+  .basisi-search .bs-pager { flex-direction: column; align-items: stretch; }
+  .basisi-search .bs-pager .btn { width: 100%; }
+  .basisi-search .bs-result-title { font-size: 1.15rem; }
+  .basisi-search .bs-ai-head { font-size: 1.1rem; }
+}

@@ -1,0 +1,222 @@
+/* ============================================================
+   SitterResultCard — 시터 결과/추천 카드 (코랄 톤)
+   - 모든 선택자는 .basisi-result-card 아래로 스코프
+   - 검색/추천/상세 어디서든 동일한 코랄 톤을 갖도록 자체 격리
+   ============================================================ */
+
+.basisi-result-card {
+  --brc-coral: #ff6b6b;
+  --brc-coral-light: #ff8e8e;
+  --brc-coral-pale: #fff0f0;
+  --brc-coral-mid: #ffd6d6;
+  --brc-dark: #1a1a2e;
+  --brc-gray: #6b7280;
+  --brc-light-gray: #f8f8fa;
+  --brc-border: #f0e8e8;
+  --brc-white: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 1.1rem 1.25rem;
+  border: 1.5px solid var(--brc-border);
+  border-radius: 18px;
+  background: var(--brc-white);
+  transition: transform 220ms, box-shadow 220ms, border-color 220ms;
+  font-family: 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--brc-dark);
+  position: relative;
+}
+
+.basisi-result-card * { box-sizing: border-box; }
+
+.basisi-result-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--brc-coral-mid);
+  box-shadow: 0 14px 36px rgba(255, 107, 107, 0.1);
+}
+
+/* ───── 상단 랭크/매칭 ───── */
+.basisi-result-card .brc-rank-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.basisi-result-card .brc-rank-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: var(--brc-coral);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  box-shadow: 0 3px 10px rgba(255, 107, 107, 0.32);
+}
+
+.basisi-result-card .brc-match-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: var(--brc-coral-pale);
+  color: var(--brc-coral);
+  border: 1px solid var(--brc-coral-mid);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* ───── 추천 이유 리스트 ───── */
+.basisi-result-card .brc-reasons {
+  margin: 0;
+  padding: 0.6rem 0.85rem;
+  background: var(--brc-light-gray);
+  border-radius: 12px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.basisi-result-card .brc-reasons li {
+  font-size: 0.82rem;
+  color: var(--brc-gray);
+  line-height: 1.55;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.basisi-result-card .brc-reasons li::before {
+  content: '·';
+  color: var(--brc-coral);
+  font-weight: 900;
+  position: absolute;
+  left: 0.25rem;
+  top: 0;
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+/* ───── 헤더 (이름 + 메타 배지) ───── */
+.basisi-result-card .brc-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.basisi-result-card .brc-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--brc-dark);
+  letter-spacing: -0.3px;
+}
+
+.basisi-result-card .brc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.basisi-result-card .brc-badge {
+  display: inline-block;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: var(--brc-light-gray);
+  color: var(--brc-gray);
+  border: 1px solid var(--brc-border);
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+}
+
+.basisi-result-card .brc-badge.is-id {
+  background: var(--brc-coral-pale);
+  color: var(--brc-coral);
+  border-color: var(--brc-coral-mid);
+  font-weight: 700;
+}
+
+.basisi-result-card .brc-badge.is-score {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+  font-weight: 700;
+}
+
+/* ───── 자기소개 ───── */
+.basisi-result-card .brc-bio {
+  font-size: 0.85rem;
+  color: var(--brc-gray);
+  line-height: 1.65;
+  margin: 0;
+  text-align: left;
+}
+
+.basisi-result-card .brc-bio.is-empty { font-style: italic; opacity: 0.7; }
+
+/* ───── 액션 ───── */
+.basisi-result-card .brc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 0.25rem;
+  border-top: 1px solid var(--brc-border);
+  padding-top: 0.85rem;
+}
+
+.basisi-result-card .brc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--brc-border);
+  background: var(--brc-white);
+  color: var(--brc-dark);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 180ms, border-color 180ms, color 180ms, box-shadow 180ms, transform 180ms;
+}
+
+.basisi-result-card .brc-btn:hover:not(:disabled) {
+  border-color: var(--brc-coral-mid);
+  color: var(--brc-coral);
+}
+
+.basisi-result-card .brc-btn.is-primary {
+  background: var(--brc-coral);
+  border-color: var(--brc-coral);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(255, 107, 107, 0.28);
+}
+
+.basisi-result-card .brc-btn.is-primary:hover:not(:disabled) {
+  background: var(--brc-coral-light);
+  border-color: var(--brc-coral-light);
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(255, 107, 107, 0.36);
+  transform: translateY(-1px);
+}
+
+/* ───── 반응형 ───── */
+@media (max-width: 560px) {
+  .basisi-result-card { padding: 1rem; }
+  .basisi-result-card .brc-actions .brc-btn { flex: 1 1 calc(50% - 4px); }
+}

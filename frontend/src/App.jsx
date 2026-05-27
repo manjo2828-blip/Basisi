@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Navigate, Route, Routes, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { AuthPanel } from './pages/AuthPanel.jsx';
 import { AccountPanel } from './pages/AccountPanel.jsx';
@@ -116,6 +116,9 @@ function AccountMenu({ displayName, onMyPage, onOpenAccount, onLogout }) {
 export function App() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const authMode = searchParams.get('mode') === 'signup' ? 'signup' : 'login';
+  const onAuthPath = location.pathname === '/auth';
 
   // 렌더링 트리거를 위한 상태입니다.
   const [tick, setTick] = useState(0);
@@ -232,7 +235,7 @@ export function App() {
           <div className="headerBarMain">
             <Link to="/" className="siteBrand" aria-label="Basisi 홈">
               <span className="siteBrandIcon" aria-hidden>
-                👶
+                🐣
               </span>
               <span className="siteBrandWord" translate="no">
                 <span className="siteBrandWordBase">BASIS</span>
@@ -243,6 +246,7 @@ export function App() {
             <nav className="headerNav" aria-label="주요 메뉴">
               {navItem('/', '홈')}
               {navItem('/about', '서비스 소개')}
+              {navItem('/search', '시터 검색')}
             </nav>
           </div>
 
@@ -260,13 +264,13 @@ export function App() {
               <div className="headerAuthGroup" aria-label="인증">
                 <Link
                   to="/auth"
-                  className={`headerAuthLink ${location.pathname === '/auth' ? 'is-active' : ''}`}
+                  className={`headerAuthLink ${onAuthPath && authMode === 'login' ? 'is-active' : ''}`}
                 >
                   로그인
                 </Link>
                 <Link
                   to="/auth?mode=signup"
-                  className={`headerAuthLink ${location.pathname === '/auth' ? 'is-active' : ''}`}
+                  className={`headerAuthLink ${onAuthPath && authMode === 'signup' ? 'is-active' : ''}`}
                 >
                   회원가입
                 </Link>
@@ -300,27 +304,19 @@ export function App() {
 
           <Route
             path="/auth"
-            element={
-              <div className="authPageShell">
-                <div className="content authPageContent">
-                  <AuthPanel onAuthChanged={onAuthChanged} onToast={notify} />
-                </div>
-              </div>
-            }
+            element={<AuthPanel onAuthChanged={onAuthChanged} onToast={notify} />}
           />
 
           <Route
             path="/search"
             element={
               <RequireAuth isAuthenticated={isAuthenticated}>
-                <PageCard>
-                  <SitterSearchPanel
-                    session={session}
-                    onToast={notify}
-                    onPickSitter={onPickSitterAndGoToReservation}
-                    onViewDetail={(id) => navigate(`/sitters/${id}`)}
-                  />
-                </PageCard>
+                <SitterSearchPanel
+                  session={session}
+                  onToast={notify}
+                  onPickSitter={onPickSitterAndGoToReservation}
+                  onViewDetail={(id) => navigate(`/sitters/${id}`)}
+                />
               </RequireAuth>
             }
           />
@@ -334,7 +330,7 @@ export function App() {
             path="/reservations"
             element={
               <RequireAuth isAuthenticated={isAuthenticated}>
-                <PageCard><ReservationPanel session={session} onToast={notify} pickedSitter={pickedSitter} /></PageCard>
+                <ReservationPanel session={session} onToast={notify} pickedSitter={pickedSitter} />
               </RequireAuth>
             }
           />
@@ -343,18 +339,18 @@ export function App() {
             path="/account"
             element={
               <RequireAuth isAuthenticated={isAuthenticated}>
-                <PageCard><AccountPanel onAuthChanged={onAuthChanged} onToast={notify} /></PageCard>
+                <AccountPanel onAuthChanged={onAuthChanged} onToast={notify} />
               </RequireAuth>
             }
           />
 
-          <Route path="/about" element={<PageCard><ServiceIntroPage /></PageCard>} />
+          <Route path="/about" element={<ServiceIntroPage />} />
 
           <Route
             path="/profile"
             element={
               <RequireAuth isAuthenticated={isAuthenticated}>
-                <PageCard><ProfilePanel session={session} onAuthChanged={onAuthChanged} onToast={notify} /></PageCard>
+                <ProfilePanel session={session} onAuthChanged={onAuthChanged} onToast={notify} />
               </RequireAuth>
             }
           />

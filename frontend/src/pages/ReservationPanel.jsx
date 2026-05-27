@@ -15,6 +15,24 @@ import { createReview } from '../lib/reviewApi.js';
 import { ApiError } from '../lib/api.js';
 import { clearSuggestedReservationWindow, getSuggestedReservationWindow } from '../lib/storage.js';
 
+import './ReservationPanel.css';
+
+const STATUS_KOREAN = {
+  REQUESTED: '신청됨',
+  ACCEPTED: '수락됨',
+  REJECTED: '거절됨',
+  CANCELLED: '취소됨',
+  CANCELED: '취소됨',
+};
+
+const STATUS_BADGE_CLASS = {
+  REQUESTED: 'is-status-requested',
+  ACCEPTED: 'is-status-accepted',
+  REJECTED: 'is-status-rejected',
+  CANCELLED: 'is-status-cancelled',
+  CANCELED: 'is-status-cancelled',
+};
+
 // 예약 패널을 렌더링합니다.
 export function ReservationPanel({ session, onToast, pickedSitter }) {
   // 로그인 상태를 확인합니다.
@@ -348,172 +366,247 @@ export function ReservationPanel({ session, onToast, pickedSitter }) {
     }
   };
 
+  const fmt = (s) => (s ? String(s).replace('T', ' ') : '-');
+
   return (
-    <div>
-      <div style={{ fontWeight: 800, marginBottom: 10 }}>예약</div>
-      <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 12 }}>
-        - 부모는 예약 신청/취소, 시터는 수락/거절을 수행합니다.
-        <br />- 시간 충돌 검증은 백엔드에서 처리됩니다.
+    <div className="basisi-reserve">
+      <div className="br-shell">
+        <div className="br-header">
+          <h1 className="br-title">예약</h1>
+          <p className="br-subtitle">
+            부모는 예약 신청·취소, 시터는 수락·거절을 수행합니다.
+            <br />시간 충돌 검증은 백엔드에서 처리됩니다.
+          </p>
+        </div>
+
+        {!email ? (
+          <div className="emptyState">로그인 후 이용할 수 있습니다.</div>
+        ) : (
+          <>
+            <div className="br-info-row">
+              <span className="badge is-info">{email}</span>
+              <span className="badge">{role || 'ROLE 미지정'}</span>
+              <button
+                type="button"
+                className="btn"
+                onClick={loadMyReservations}
+                disabled={loading}
+              >
+                {loading ? '불러오는 중...' : '내 예약 목록 새로고침'}
+              </button>
+            </div>
+
+            {role === 'PARENT' ? (
+              <>
+                <div className="divider" />
+                <h2 className="br-section-title">예약 신청 (부모)</h2>
+
+                {!pickedSitter ? (
+                  <div className="br-hint">
+                    시터를 먼저 선택해주세요. <code>시터검색</code> →{' '}
+                    <code>상세 보기</code> → <code>예약하기</code>
+                  </div>
+                ) : (
+                  <div className="br-picked">
+                    <span aria-hidden>💝</span>
+                    선택 시터: <b>{selectedSitterName || '이름 없음'}</b>
+                    {selectedSitterId != null ? (
+                      <span className="badge">시터 ID {selectedSitterId}</span>
+                    ) : null}
+                  </div>
+                )}
+
+                <div className="br-form">
+                  <div className="br-form-row">
+                    <div className="field">
+                      <label>시작 시각</label>
+                      <input
+                        type="datetime-local"
+                        value={startAt}
+                        onChange={(e) => setStartAt(e.target.value)}
+                      />
+                    </div>
+                    <div className="field">
+                      <label>종료 시각</label>
+                      <input
+                        type="datetime-local"
+                        value={endAt}
+                        onChange={(e) => setEndAt(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <TextInput
+                    label="요청 메모"
+                    value={note}
+                    onChange={setNote}
+                    placeholder="요청사항을 적어주세요"
+                  />
+
+                  <div className="br-form-cta">
+                    <button
+                      type="button"
+                      className="btn primary lg"
+                      onClick={onRequest}
+                      disabled={loading || !canRequest}
+                    >
+                      {loading ? '신청중...' : '🗓️ 예약 신청'}
+                    </button>
+                  </div>
+                </div>
+              </>
+            ) : null}
+
+            {error ? <div className="error">{error}</div> : null}
+
+            <div className="divider" />
+            <h2 className="br-section-title">내 예약 목록</h2>
+
+            {loading && reservations.length === 0 ? (
+              <div className="br-list">
+                <div className="skeletonCard">
+                  <div className="skeletonLine" style={{ width: '45%', marginBottom: 10 }} />
+                  <div className="skeletonLine" style={{ width: '70%', marginBottom: 8 }} />
+                  <div className="skeletonLine" style={{ width: '85%', marginBottom: 8 }} />
+                  <div className="skeletonLine" style={{ width: '55%' }} />
+                </div>
+                <div className="skeletonCard">
+                  <div className="skeletonLine" style={{ width: '55%', marginBottom: 10 }} />
+                  <div className="skeletonLine" style={{ width: '80%', marginBottom: 8 }} />
+                  <div className="skeletonLine" style={{ width: '60%' }} />
+                </div>
+              </div>
+            ) : reservations.length === 0 ? (
+              <div className="emptyState">
+                아직 예약이 없습니다. 먼저 시터를 선택하고 <b>예약 신청</b>을 진행해보세요.
+              </div>
+            ) : (
+              <div className="br-list">
+                {reservations.map((r) => {
+                  const statusClass = STATUS_BADGE_CLASS[r.status] || '';
+                  const statusKr = STATUS_KOREAN[r.status] || r.status;
+                  return (
+                    <div key={r.reservationId} className="br-card">
+                      <div className="br-card-head">
+                        <div className="br-card-title">
+                          예약 ID: {r.reservationId}
+                          <span className={`badge ${statusClass}`}>{statusKr}</span>
+                          {r.reviewed ? (
+                            <span className="badge is-info">리뷰 작성완료</span>
+                          ) : null}
+                        </div>
+                        <div className="row">
+                          <span className="badge">시터 ID {r.sitterProfileId}</span>
+                          <span className="badge">
+                            {fmt(r.startAt)} ~ {fmt(r.endAt)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="br-card-meta">
+                        부모: <b>{r.parentName}</b> · 시터: <b>{r.sitterName}</b>
+                      </div>
+
+                      {r.note ? (
+                        <div className="br-card-note">메모: {r.note}</div>
+                      ) : null}
+
+                      <div className="br-card-actions">
+                        {role === 'SITTER' && r.status === 'REQUESTED' ? (
+                          <>
+                            <button
+                              type="button"
+                              className="btn primary"
+                              onClick={() => onAccept(r.reservationId)}
+                              disabled={loading}
+                            >
+                              {loading ? '처리중...' : '수락'}
+                            </button>
+                            <button
+                              type="button"
+                              className="btn danger"
+                              onClick={() => onReject(r.reservationId)}
+                              disabled={loading}
+                            >
+                              {loading ? '처리중...' : '거절'}
+                            </button>
+                          </>
+                        ) : null}
+                        {role === 'PARENT' &&
+                        (r.status === 'REQUESTED' || r.status === 'ACCEPTED') ? (
+                          <button
+                            type="button"
+                            className="btn danger"
+                            onClick={() => onCancel(r.reservationId)}
+                            disabled={loading}
+                          >
+                            {loading ? '처리중...' : '취소'}
+                          </button>
+                        ) : null}
+                      </div>
+
+                      {canWriteReview(r) ? (
+                        <div className="br-review">
+                          <h3 className="br-review-title">리뷰 작성</h3>
+                          <div className="br-review-row">
+                            <div className="field br-review-rating">
+                              <label>별점 (1~5)</label>
+                              <input
+                                type="number"
+                                min="1"
+                                max="5"
+                                step="1"
+                                value={
+                                  reviewDrafts?.[r.reservationId]?.rating ?? '5'
+                                }
+                                onChange={(e) =>
+                                  onReviewFieldChange(
+                                    r.reservationId,
+                                    'rating',
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                            </div>
+                            <div className="field br-review-comment">
+                              <label>코멘트 (선택)</label>
+                              <input
+                                type="text"
+                                maxLength="1000"
+                                value={
+                                  reviewDrafts?.[r.reservationId]?.comment ?? ''
+                                }
+                                onChange={(e) =>
+                                  onReviewFieldChange(
+                                    r.reservationId,
+                                    'comment',
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="시터 이용 후기를 작성해주세요."
+                              />
+                            </div>
+                          </div>
+                          <div className="br-review-cta">
+                            <button
+                              type="button"
+                              className="btn primary"
+                              onClick={() => onCreateReview(r)}
+                              disabled={loading}
+                            >
+                              {loading ? '저장중...' : '리뷰 저장'}
+                            </button>
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
       </div>
-
-      {!email ? (
-        <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)' }}>로그인 후 이용할 수 있습니다.</div>
-      ) : (
-        <>
-          <div className="row" style={{ alignItems: 'center' }}>
-            <span className="badge">{email}</span>
-            <span className="badge">{role || 'ROLE 미지정'}</span>
-            <button className="btn" onClick={loadMyReservations} disabled={loading}>
-              {loading ? '불러오는 중...' : '내 예약 목록 새로고침'}
-            </button>
-          </div>
-
-          {role === 'PARENT' ? (
-            <>
-              <div className="divider" />
-              <div style={{ fontWeight: 800, marginBottom: 10 }}>예약 신청(부모)</div>
-              {!pickedSitter ? (
-                <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 10 }}>
-                  시터를 먼저 선택해주세요. (`시터검색` → `상세보기` → `예약하기`)
-                </div>
-              ) : null}
-              {pickedSitter ? (
-                <div className="emptyState" style={{ marginBottom: 10 }}>
-                  선택 시터: <b>{selectedSitterName || '이름 없음'}</b>
-                </div>
-              ) : null}
-              <div className="field">
-                <label>시작 시각</label>
-                <input type="datetime-local" value={startAt} onChange={(e) => setStartAt(e.target.value)} />
-              </div>
-              <div className="field">
-                <label>종료 시각</label>
-                <input type="datetime-local" value={endAt} onChange={(e) => setEndAt(e.target.value)} />
-              </div>
-              <TextInput label="요청 메모" value={note} onChange={setNote} placeholder="요청사항을 적어주세요" />
-              <div className="row">
-                <button className="btn primary" onClick={onRequest} disabled={loading || !canRequest}>
-                  {loading ? '신청중...' : '예약 신청'}
-                </button>
-              </div>
-            </>
-          ) : null}
-
-          {error ? <div className="error">{error}</div> : null}
-
-          <div className="divider" />
-          <div style={{ fontWeight: 800, marginBottom: 10 }}>내 예약 목록</div>
-          {loading && reservations.length === 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <div className="skeletonCard">
-                <div className="skeletonLine" style={{ width: '45%', marginBottom: 10 }} />
-                <div className="skeletonLine" style={{ width: '70%', marginBottom: 8 }} />
-                <div className="skeletonLine" style={{ width: '85%', marginBottom: 8 }} />
-                <div className="skeletonLine" style={{ width: '55%' }} />
-              </div>
-              <div className="skeletonCard">
-                <div className="skeletonLine" style={{ width: '55%', marginBottom: 10 }} />
-                <div className="skeletonLine" style={{ width: '80%', marginBottom: 8 }} />
-                <div className="skeletonLine" style={{ width: '60%' }} />
-              </div>
-            </div>
-          ) : reservations.length === 0 ? (
-            <div className="emptyState">
-              아직 예약이 없습니다. 먼저 시터를 선택하고 <b>예약 신청</b>을 진행해보세요.
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {reservations.map((r) => (
-                <div
-                  key={r.reservationId}
-                  style={{
-                    border: '1px solid rgba(26,21,35,0.12)',
-                    borderRadius: 14,
-                    padding: 12,
-                    background: 'rgba(26,21,35,0.04)'
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
-                    <div style={{ fontWeight: 800 }}>
-                      예약 ID: {r.reservationId} <span className="badge">{r.status}</span>
-                      {r.reviewed ? <span className="badge">리뷰 작성완료</span> : null}
-                    </div>
-                    <div className="row" style={{ alignItems: 'center' }}>
-                      <span className="badge">시터ID {r.sitterProfileId}</span>
-                      <span className="badge">
-                        {r.startAt} ~ {r.endAt}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div style={{ marginTop: 6, fontSize: 12, color: 'rgba(26,21,35,0.58)' }}>
-                    부모: {r.parentName} / 시터: {r.sitterName}
-                  </div>
-                  {r.note ? (
-                    <div style={{ marginTop: 6, fontSize: 12, color: 'rgba(26,21,35,0.58)' }}>메모: {r.note}</div>
-                  ) : null}
-
-                  <div className="row" style={{ marginTop: 10 }}>
-                    {role === 'SITTER' && r.status === 'REQUESTED' ? (
-                      <>
-                        <button className="btn primary" onClick={() => onAccept(r.reservationId)} disabled={loading}>
-                          {loading ? '처리중...' : '수락'}
-                        </button>
-                        <button className="btn accent" onClick={() => onReject(r.reservationId)} disabled={loading}>
-                          {loading ? '처리중...' : '거절'}
-                        </button>
-                      </>
-                    ) : null}
-                    {role === 'PARENT' && (r.status === 'REQUESTED' || r.status === 'ACCEPTED') ? (
-                      <button className="btn accent" onClick={() => onCancel(r.reservationId)} disabled={loading}>
-                        {loading ? '처리중...' : '취소'}
-                      </button>
-                    ) : null}
-                  </div>
-
-                  {canWriteReview(r) ? (
-                    <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid rgba(26,21,35,0.12)' }}>
-                      <div style={{ fontWeight: 800, marginBottom: 8 }}>리뷰 작성</div>
-                      <div className="row">
-                        <div style={{ minWidth: 150, flex: '0 0 150px' }}>
-                          <div className="field" style={{ marginBottom: 0 }}>
-                            <label>별점(1~5)</label>
-                            <input
-                              type="number"
-                              min="1"
-                              max="5"
-                              step="1"
-                              value={reviewDrafts?.[r.reservationId]?.rating ?? '5'}
-                              onChange={(e) => onReviewFieldChange(r.reservationId, 'rating', e.target.value)}
-                            />
-                          </div>
-                        </div>
-                        <div style={{ flex: 1, minWidth: 220 }}>
-                          <div className="field" style={{ marginBottom: 0 }}>
-                            <label>코멘트(선택)</label>
-                            <input
-                              type="text"
-                              maxLength="1000"
-                              value={reviewDrafts?.[r.reservationId]?.comment ?? ''}
-                              onChange={(e) => onReviewFieldChange(r.reservationId, 'comment', e.target.value)}
-                              placeholder="시터 이용 후기를 작성해주세요."
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row" style={{ marginTop: 8 }}>
-                        <button className="btn primary" onClick={() => onCreateReview(r)} disabled={loading}>
-                          {loading ? '저장중...' : '리뷰 저장'}
-                        </button>
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          )}
-        </>
-      )}
     </div>
   );
 }

@@ -1,0 +1,257 @@
+/* ============================================================
+   AuthPanel — 로그인 / 회원가입 (코랄 톤 · 메인 페이지와 동일한 디자인 언어)
+   - 모든 선택자는 .basisi-auth 아래로 스코프
+   - 전역 .authPanel / .field / .btn 스타일과 격리
+   ============================================================ */
+
+.basisi-auth {
+  --ba-coral: #ff6b6b;
+  --ba-coral-light: #ff8e8e;
+  --ba-coral-pale: #fff0f0;
+  --ba-coral-mid: #ffd6d6;
+  --ba-dark: #1a1a2e;
+  --ba-gray: #6b7280;
+  --ba-light-gray: #f8f8fa;
+  --ba-border: #f0e8e8;
+  --ba-white: #ffffff;
+
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #fff 55%, #fff5f5 100%);
+  padding: 4rem 2rem;
+  color: var(--ba-dark);
+  font-family: 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* siteMain 의 상하 패딩(22/60px) 상쇄 */
+  margin: -22px 0 -60px;
+  min-height: calc(100vh - 80px);
+}
+
+.basisi-auth * { box-sizing: border-box; }
+
+/* ───── 카드 ───── */
+.basisi-auth .ba-card {
+  background-color: var(--ba-white);
+  width: 100%;
+  max-width: 460px;
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
+  box-shadow:
+    0 20px 60px rgba(255, 107, 107, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--ba-border);
+  text-align: center;
+  animation: ba-fade-up 0.55s ease both;
+}
+
+.basisi-auth .ba-icon {
+  width: 64px;
+  height: 64px;
+  background-color: var(--ba-coral-pale);
+  border: 1px solid var(--ba-coral-mid);
+  border-radius: 18px;
+  margin: 0 auto 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  box-shadow: 0 4px 16px rgba(255, 107, 107, 0.15);
+}
+
+.basisi-auth .ba-title {
+  font-size: 1.7rem;
+  font-weight: 900;
+  letter-spacing: -0.8px;
+  margin: 0 0 0.5rem;
+  color: var(--ba-dark);
+}
+
+.basisi-auth .ba-subtitle {
+  font-size: 0.92rem;
+  color: var(--ba-gray);
+  margin: 0 0 2.25rem;
+  line-height: 1.6;
+  padding: 0 4px;
+}
+
+/* ───── 폼 ───── */
+.basisi-auth .ba-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.basisi-auth .ba-field {
+  text-align: left;
+  margin-bottom: 1.1rem;
+}
+
+.basisi-auth .ba-field label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ba-gray);
+  margin-bottom: 0.45rem;
+  padding-left: 4px;
+  letter-spacing: -0.1px;
+}
+
+.basisi-auth .ba-input,
+.basisi-auth .ba-select {
+  width: 100%;
+  padding: 0.85rem 1.15rem;
+  font-size: 0.95rem;
+  border: 1.5px solid var(--ba-border);
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 180ms, background-color 180ms, box-shadow 180ms;
+  color: var(--ba-dark);
+  background-color: var(--ba-light-gray);
+  font-family: inherit;
+}
+
+.basisi-auth .ba-input::placeholder { color: #c4c8d0; }
+
+.basisi-auth .ba-input:hover:not(:disabled),
+.basisi-auth .ba-select:hover:not(:disabled) {
+  border-color: var(--ba-coral-mid);
+}
+
+.basisi-auth .ba-input:focus,
+.basisi-auth .ba-select:focus {
+  border-color: var(--ba-coral);
+  background-color: var(--ba-white);
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.12);
+}
+
+.basisi-auth .ba-input:disabled,
+.basisi-auth .ba-select:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* select 화살표 커스텀 */
+.basisi-auth .ba-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+
+.basisi-auth .ba-hint {
+  font-size: 0.78rem;
+  color: var(--ba-gray);
+  margin: 0.5rem 0 0;
+  text-align: center;
+  line-height: 1.55;
+}
+
+/* ───── 메시지 ───── */
+.basisi-auth .ba-message {
+  margin: 0.25rem 0 0.5rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  text-align: left;
+  line-height: 1.55;
+  border: 1px solid transparent;
+}
+
+.basisi-auth .ba-message.is-error {
+  background-color: #fff5f5;
+  color: #c53030;
+  border-color: #fed7d7;
+}
+
+.basisi-auth .ba-message.is-success {
+  background-color: #f0fff4;
+  color: #2f855a;
+  border-color: #c6f6d5;
+}
+
+/* ───── 제출 버튼 ───── */
+.basisi-auth .ba-submit {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--ba-coral);
+  color: var(--ba-white);
+  font-size: 0.98rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px rgba(255, 107, 107, 0.32);
+  transition: background-color 180ms, transform 180ms, box-shadow 180ms;
+  font-family: inherit;
+  letter-spacing: -0.2px;
+}
+
+.basisi-auth .ba-submit:hover:not(:disabled) {
+  background-color: var(--ba-coral-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(255, 107, 107, 0.42);
+}
+
+.basisi-auth .ba-submit:active:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(255, 107, 107, 0.32);
+}
+
+.basisi-auth .ba-submit:disabled {
+  background-color: #f0a8b6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ───── 푸터 / 모드 전환 ───── */
+.basisi-auth .ba-footer {
+  font-size: 0.88rem;
+  color: var(--ba-gray);
+  margin: 0;
+}
+
+.basisi-auth .ba-link {
+  background: none;
+  border: none;
+  color: var(--ba-coral);
+  font-weight: 700;
+  margin-left: 4px;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0;
+  transition: color 160ms, border-color 160ms;
+  border-bottom: 1px solid transparent;
+}
+
+.basisi-auth .ba-link:hover {
+  color: var(--ba-coral-light);
+  border-bottom-color: var(--ba-coral-light);
+}
+
+/* ───── 진입 애니메이션 ───── */
+@keyframes ba-fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .basisi-auth .ba-card { animation: none; }
+}
+
+/* ───── 반응형 ───── */
+@media (max-width: 620px) {
+  .basisi-auth { padding: 2.5rem 1rem 3rem; }
+  .basisi-auth .ba-card { padding: 2.25rem 1.5rem; border-radius: 20px; }
+  .basisi-auth .ba-title { font-size: 1.45rem; }
+  .basisi-auth .ba-subtitle { margin-bottom: 1.75rem; }
+  .basisi-auth .ba-icon { width: 58px; height: 58px; font-size: 1.6rem; }
+}

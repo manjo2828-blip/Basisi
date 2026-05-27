@@ -1,0 +1,681 @@
+/* ============================================================
+   ProfilePanel — 마이페이지 (코랄 톤 · 메인/로그인/소개와 동일한 디자인 언어)
+   - 모든 선택자는 .basisi-profile 아래로 스코프
+   - 전역 .btn / .field / .row / .divider / .badge / .error / .card 룰을
+     이 스코프 안에서 코랄 톤으로 재정의
+   ============================================================ */
+
+.basisi-profile {
+  --bp-coral: #ff6b6b;
+  --bp-coral-light: #ff8e8e;
+  --bp-coral-pale: #fff0f0;
+  --bp-coral-mid: #ffd6d6;
+  --bp-dark: #1a1a2e;
+  --bp-gray: #6b7280;
+  --bp-light-gray: #f8f8fa;
+  --bp-border: #f0e8e8;
+  --bp-white: #ffffff;
+  --bp-danger: #c53030;
+  --bp-danger-bg: #fff5f5;
+  --bp-danger-border: #fed7d7;
+
+  background: linear-gradient(135deg, #fff 55%, #fff5f5 100%);
+  padding: 3rem 5%;
+  min-height: calc(100vh - 80px);
+  /* siteMain 상하 패딩 보정 */
+  margin: -22px 0 -60px;
+  font-family: 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--bp-dark);
+}
+
+.basisi-profile * { box-sizing: border-box; }
+
+/* ───── 외곽 카드 ───── */
+.basisi-profile .bp-shell {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: var(--bp-white);
+  border-radius: 28px;
+  padding: 2.5rem 2.25rem 2rem;
+  box-shadow:
+    0 20px 60px rgba(255, 107, 107, 0.1),
+    0 4px 18px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--bp-border);
+  animation: bp-fade-up 0.5s ease both;
+}
+
+@keyframes bp-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .basisi-profile .bp-shell { animation: none; }
+}
+
+/* ───── 페이지 헤더 ───── */
+.basisi-profile .bp-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.basisi-profile .bp-title {
+  font-size: clamp(1.85rem, 2.8vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: var(--bp-dark);
+  margin: 0 0 0.55rem;
+}
+
+.basisi-profile .bp-subtitle {
+  font-size: 1.05rem;
+  color: var(--bp-gray);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ───── 섹션 헤더 (탭 본문 위) ───── */
+.basisi-profile .bp-section-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--bp-dark);
+  margin: 0.4rem 0 0.5rem;
+}
+
+.basisi-profile .bp-section-sub {
+  text-align: center;
+  font-size: 1.05rem;
+  color: var(--bp-gray);
+  margin: 0 0 1.75rem;
+  line-height: 1.55;
+}
+
+/* 좌측 정렬 섹션(폼) */
+.basisi-profile .bp-section-title.is-left {
+  text-align: left;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.basisi-profile .bp-section-sub.is-left {
+  text-align: left;
+  margin-bottom: 1.1rem;
+}
+
+/* ───── 탭 행 ───── */
+.basisi-profile .bp-tab-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 0 1.5rem;
+}
+
+/* ───── 전역 .row / .divider 재정의 ───── */
+.basisi-profile .row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.basisi-profile .divider {
+  border-top: 1px solid var(--bp-border);
+  margin: 1.5rem 0;
+  height: 0;
+}
+
+/* ───── 전역 .btn 재정의 ───── */
+.basisi-profile .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--bp-border);
+  background: var(--bp-white);
+  color: var(--bp-dark);
+  font-size: 1.02rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: -0.2px;
+  transition: background-color 180ms, border-color 180ms, color 180ms, box-shadow 180ms, transform 180ms;
+  text-decoration: none;
+  line-height: 1.3;
+}
+
+.basisi-profile .btn:hover:not(:disabled) {
+  border-color: var(--bp-coral-mid);
+  color: var(--bp-coral);
+}
+
+.basisi-profile .btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  border-color: var(--bp-border);
+  color: var(--bp-gray);
+  background: var(--bp-light-gray);
+}
+
+/* primary: 솔리드 코랄 (활성 탭 / 메인 액션) */
+.basisi-profile .btn.primary {
+  background: var(--bp-coral);
+  border-color: var(--bp-coral);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(255, 107, 107, 0.28);
+}
+
+.basisi-profile .btn.primary:hover:not(:disabled) {
+  background: var(--bp-coral-light);
+  border-color: var(--bp-coral-light);
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(255, 107, 107, 0.36);
+  transform: translateY(-1px);
+}
+
+/* accent: 코랄 페일 (서브 액션 / 보조 강조) */
+.basisi-profile .btn.accent {
+  background: var(--bp-coral-pale);
+  border-color: var(--bp-coral-mid);
+  color: var(--bp-coral);
+  font-weight: 700;
+}
+
+.basisi-profile .btn.accent:hover:not(:disabled) {
+  background: var(--bp-coral-mid);
+  border-color: var(--bp-coral);
+  color: var(--bp-coral);
+}
+
+/* ───── 전역 .field 재정의 ───── */
+.basisi-profile .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.basisi-profile .field > label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bp-gray);
+  padding-left: 4px;
+}
+
+.basisi-profile .field input,
+.basisi-profile .field select,
+.basisi-profile .field textarea,
+.basisi-profile .bp-input,
+.basisi-profile .bp-textarea {
+  width: 100%;
+  padding: 0.9rem 1.15rem;
+  font-size: 1.05rem;
+  border: 1.5px solid var(--bp-border);
+  border-radius: 12px;
+  background: var(--bp-light-gray);
+  color: var(--bp-dark);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 180ms, background-color 180ms, box-shadow 180ms;
+}
+
+.basisi-profile .field textarea,
+.basisi-profile .bp-textarea {
+  min-height: 160px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.basisi-profile .field input::placeholder,
+.basisi-profile .field textarea::placeholder,
+.basisi-profile .bp-input::placeholder,
+.basisi-profile .bp-textarea::placeholder { color: #c4c8d0; }
+
+.basisi-profile .field input:hover:not(:disabled),
+.basisi-profile .field select:hover:not(:disabled),
+.basisi-profile .field textarea:hover:not(:disabled) {
+  border-color: var(--bp-coral-mid);
+}
+
+.basisi-profile .field input:focus,
+.basisi-profile .field select:focus,
+.basisi-profile .field textarea:focus,
+.basisi-profile .bp-input:focus,
+.basisi-profile .bp-textarea:focus {
+  border-color: var(--bp-coral);
+  background: var(--bp-white);
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.12);
+}
+
+.basisi-profile .field input:disabled,
+.basisi-profile .field select:disabled,
+.basisi-profile .field textarea:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* select 화살표 */
+.basisi-profile .field select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+
+/* ───── 전역 .badge 재정의 ───── */
+.basisi-profile .badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  background: var(--bp-coral-pale);
+  color: var(--bp-coral);
+  border: 1px solid var(--bp-coral-mid);
+  letter-spacing: 0.2px;
+}
+
+/* ───── 전역 .error 재정의 ───── */
+.basisi-profile .error {
+  background: var(--bp-danger-bg);
+  color: var(--bp-danger);
+  border: 1px solid var(--bp-danger-border);
+  border-radius: 12px;
+  padding: 0.85rem 1.15rem;
+  font-size: 1rem;
+  margin-bottom: 14px;
+  line-height: 1.55;
+}
+
+/* ───── 유틸리티 블록(인라인 스타일 대체) ───── */
+.basisi-profile .bp-block {
+  border: 1.5px solid var(--bp-border);
+  border-radius: 16px;
+  padding: 1.1rem 1.2rem;
+  background: var(--bp-white);
+  margin-bottom: 14px;
+  transition: border-color 200ms, box-shadow 200ms;
+}
+
+.basisi-profile .bp-block.is-soft { background: #fbfbfc; }
+
+.basisi-profile .bp-block:hover { border-color: var(--bp-coral-mid); }
+
+.basisi-profile .bp-block-title {
+  font-weight: 800;
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+  color: var(--bp-dark);
+  letter-spacing: -0.3px;
+}
+
+.basisi-profile .bp-block-sub {
+  font-size: 0.95rem;
+  color: var(--bp-gray);
+  margin: 0 0 14px;
+  line-height: 1.55;
+}
+
+/* ───── 헬퍼 텍스트 ───── */
+.basisi-profile .bp-help {
+  font-size: 0.95rem;
+  color: var(--bp-gray);
+  line-height: 1.55;
+}
+
+.basisi-profile .bp-help.is-right { text-align: right; }
+
+.basisi-profile .bp-meta {
+  font-size: 0.88rem;
+  color: var(--bp-gray);
+  line-height: 1.5;
+}
+
+.basisi-profile .bp-eyebrow {
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--bp-coral);
+  margin-bottom: 8px;
+}
+
+/* ───── 라디오 칩 (PreferredRadioGroup) ─────
+   - 칩 내부 텍스트는 한 줄로 유지 (nowrap)
+   - 폰트와 패딩을 가독성 우선으로 확대 */
+.basisi-profile .bp-radio-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.65rem 1.2rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--bp-border);
+  background: var(--bp-white);
+  cursor: pointer;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--bp-dark);
+  transition: background-color 180ms, border-color 180ms, color 180ms, box-shadow 180ms;
+  user-select: none;
+  white-space: nowrap;
+  line-height: 1.2;
+  letter-spacing: -0.2px;
+}
+
+.basisi-profile .bp-radio-chip:hover { border-color: var(--bp-coral-mid); color: var(--bp-coral); }
+
+.basisi-profile .bp-radio-chip.is-on {
+  background: var(--bp-coral-pale);
+  border-color: var(--bp-coral);
+  color: var(--bp-coral);
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.15);
+}
+
+.basisi-profile .bp-radio-chip input {
+  accent-color: var(--bp-coral);
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* 칩 행 — gap을 키워 칩 사이 간격 명확히 */
+.basisi-profile .bp-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  row-gap: 10px;
+}
+
+/* ───── 그리드 ───── */
+.basisi-profile .bp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.basisi-profile .bp-grid.is-tight {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+/* ───── 가구 형태(맞벌이/전업) 큰 버튼 ───── */
+.basisi-profile .bp-big-choice {
+  flex: 1 1 180px;
+  min-height: 96px;
+  padding: 1.15rem 1.4rem;
+  border-radius: 16px;
+  border: 1.5px solid var(--bp-border);
+  background: var(--bp-white);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--bp-dark);
+  cursor: pointer;
+  transition: background-color 180ms, border-color 180ms, color 180ms, box-shadow 180ms, transform 180ms;
+  font-family: inherit;
+  letter-spacing: -0.2px;
+}
+
+.basisi-profile .bp-big-choice:hover:not(:disabled) {
+  border-color: var(--bp-coral-mid);
+  color: var(--bp-coral);
+}
+
+.basisi-profile .bp-big-choice.is-on {
+  background: var(--bp-coral);
+  border-color: var(--bp-coral);
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(255, 107, 107, 0.3);
+  transform: translateY(-1px);
+}
+
+/* ───── 일정 카드(정기·특정일·미정) ───── */
+.basisi-profile .bp-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.basisi-profile .bp-schedule-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 1.1rem 1.25rem;
+  border-radius: 16px;
+  border: 1.5px solid var(--bp-border);
+  background: var(--bp-white);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 200ms, box-shadow 200ms, transform 200ms, background-color 200ms;
+  font-family: inherit;
+  color: var(--bp-dark);
+}
+
+.basisi-profile .bp-schedule-btn:hover {
+  border-color: var(--bp-coral-mid);
+  box-shadow: 0 10px 24px rgba(255, 107, 107, 0.08);
+  transform: translateY(-1px);
+}
+
+.basisi-profile .bp-schedule-btn.is-on {
+  border-color: var(--bp-coral);
+  background: var(--bp-coral-pale);
+}
+
+.basisi-profile .bp-schedule-icon {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: var(--bp-coral-pale);
+  border: 1px solid var(--bp-coral-mid);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.55rem;
+}
+
+.basisi-profile .bp-schedule-btn.is-on .bp-schedule-icon {
+  background: var(--bp-white);
+  border-color: var(--bp-coral);
+}
+
+.basisi-profile .bp-schedule-body { flex: 1; min-width: 0; }
+
+.basisi-profile .bp-schedule-title {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--bp-dark);
+  letter-spacing: -0.2px;
+}
+
+.basisi-profile .bp-schedule-desc {
+  font-size: 0.95rem;
+  color: var(--bp-gray);
+  margin-top: 6px;
+  line-height: 1.55;
+}
+
+.basisi-profile .bp-schedule-arrow {
+  color: var(--bp-coral);
+  font-weight: 800;
+  font-size: 1.3rem;
+}
+
+/* ───── CCTV 큰 카드 버튼 ───── */
+.basisi-profile .bp-big-toggle {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 1.15rem 1.4rem;
+  border-radius: 16px;
+  border: 1.5px solid var(--bp-border);
+  background: var(--bp-white);
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: border-color 180ms, background-color 180ms, box-shadow 180ms, transform 180ms;
+  font-family: inherit;
+  color: var(--bp-dark);
+}
+
+.basisi-profile .bp-big-toggle:hover { border-color: var(--bp-coral-mid); }
+
+.basisi-profile .bp-big-toggle.is-on {
+  border-color: var(--bp-coral);
+  background: var(--bp-coral-pale);
+  box-shadow: 0 8px 22px rgba(255, 107, 107, 0.1);
+}
+
+.basisi-profile .bp-big-toggle .bp-big-toggle-title {
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: -0.2px;
+}
+
+.basisi-profile .bp-big-toggle .bp-big-toggle-desc {
+  font-size: 0.95rem;
+  color: var(--bp-gray);
+  margin-top: 6px;
+  line-height: 1.55;
+}
+
+/* ───── 점수 카드 (시터 불꽃 점수) ───── */
+.basisi-profile .bp-score-card {
+  border: 1.5px solid var(--bp-coral-mid);
+  background: linear-gradient(135deg, #fff 55%, #fff5f5 100%);
+  border-radius: 18px;
+  padding: 1.25rem 1.4rem;
+  margin-bottom: 1.4rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.basisi-profile .bp-score-title {
+  font-weight: 900;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+  color: var(--bp-dark);
+  font-size: 1.15rem;
+}
+
+/* ───── 빈 상태 점선 박스 ───── */
+.basisi-profile .bp-empty {
+  margin-top: 16px;
+  padding: 1.75rem;
+  border-radius: 14px;
+  border: 1.5px dashed var(--bp-coral-mid);
+  text-align: center;
+  font-size: 1rem;
+  color: var(--bp-gray);
+  background: var(--bp-coral-pale);
+  line-height: 1.6;
+}
+
+/* ───── CTA 행 ───── */
+.basisi-profile .bp-cta-row {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.basisi-profile .bp-role-info {
+  margin-top: 1.1rem;
+  font-size: 0.95rem;
+  color: var(--bp-gray);
+  text-align: center;
+}
+
+/* ───── 키워드 칩 영역의 버튼(작은 chip 버튼) ───── */
+.basisi-profile .bp-chip-row .btn {
+  font-size: 0.95rem;
+  padding: 0.5rem 1.05rem;
+}
+
+/* ───── 체크박스 + 라벨 ───── */
+.basisi-profile .bp-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.65rem 1.05rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--bp-border);
+  background: var(--bp-white);
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--bp-dark);
+  transition: border-color 180ms;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.basisi-profile .bp-check:hover { border-color: var(--bp-coral-mid); }
+.basisi-profile .bp-check input { accent-color: var(--bp-coral); }
+
+/* ───── 카운터 (예: 2 / 5) ───── */
+.basisi-profile .bp-counter {
+  font-size: 0.95rem;
+  color: var(--bp-gray);
+  margin-bottom: 12px;
+}
+
+.basisi-profile .bp-counter b { color: var(--bp-coral); font-weight: 800; }
+
+/* ───── 대표 사진 라벨 ───── */
+.basisi-profile .bp-photo-eyebrow {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--bp-coral);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+/* ───── 자기소개·메시지 글자수 ───── */
+.basisi-profile .bp-len {
+  font-size: 0.88rem;
+  color: var(--bp-gray);
+  text-align: right;
+  margin-top: 6px;
+}
+
+/* ───── 반응형 ───── */
+@media (max-width: 960px) {
+  .basisi-profile .bp-shell { padding: 2.25rem 1.75rem 1.75rem; }
+  .basisi-profile .bp-title { font-size: 1.7rem; }
+  .basisi-profile .bp-section-title { font-size: 1.35rem; }
+  .basisi-profile .bp-section-title.is-left { font-size: 1.2rem; }
+  .basisi-profile .bp-section-sub { font-size: 0.98rem; }
+  .basisi-profile .bp-block-title { font-size: 1.1rem; }
+  .basisi-profile .bp-radio-chip { font-size: 0.96rem; padding: 0.6rem 1.05rem; }
+  .basisi-profile .btn { font-size: 0.96rem; padding: 0.65rem 1.25rem; }
+  .basisi-profile .bp-big-choice { font-size: 1.05rem; min-height: 88px; }
+}
+
+@media (max-width: 760px) {
+  .basisi-profile { padding: 2rem 4%; }
+  .basisi-profile .bp-shell { padding: 1.75rem 1.25rem 1.5rem; border-radius: 22px; }
+  .basisi-profile .bp-title { font-size: 1.55rem; }
+  .basisi-profile .bp-subtitle { font-size: 0.98rem; }
+  .basisi-profile .bp-section-title { font-size: 1.2rem; }
+  .basisi-profile .bp-section-title.is-left { font-size: 1.12rem; }
+  .basisi-profile .bp-tab-row { justify-content: flex-start; }
+  .basisi-profile .bp-radio-chip { font-size: 0.92rem; padding: 0.55rem 0.95rem; }
+  .basisi-profile .bp-big-choice { font-size: 1rem; min-height: 80px; padding: 0.95rem 1.1rem; }
+  .basisi-profile .bp-schedule-icon { width: 44px; height: 44px; font-size: 1.35rem; }
+  .basisi-profile .bp-schedule-title { font-size: 1.05rem; }
+  .basisi-profile .bp-schedule-desc { font-size: 0.88rem; }
+  .basisi-profile .bp-cta-row { flex-direction: column; align-items: stretch; }
+  .basisi-profile .bp-cta-row .btn { width: 100%; }
+}

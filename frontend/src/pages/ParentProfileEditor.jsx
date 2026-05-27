@@ -5,7 +5,7 @@ import { ApiError } from '../lib/api.js';
 import {
   deleteMyParentProfile,
   getMyParentProfile,
-  upsertMyParentProfile
+  upsertMyParentProfile,
 } from '../lib/profileApi.js';
 import { PARENT_EXPECTATION_KEYWORDS } from '../data/parentExpectationKeywords.js';
 import { SIDO_LIST, listDong, listSigungu } from '../data/koreaRegions.js';
@@ -17,80 +17,68 @@ const TABS = [
   { id: 'CARE', label: '돌봄 아이 선택' },
   { id: 'KEYWORDS', label: '맘시터 요청' },
   { id: 'SCHEDULE', label: '필요 일정' },
-  { id: 'MESSAGE', label: '전할 말' }
+  { id: 'MESSAGE', label: '전할 말' },
 ];
 
 const PREFERRED_AGE_OPTIONS = [
   { value: 'TWENTIES', label: '20대 (20~29세)' },
   { value: 'THIRTIES', label: '30대 (30~39세)' },
   { value: 'FORTIES', label: '40대 (40~49세)' },
-  { value: 'FIFTIES', label: '50대 (50~59세)' }
+  { value: 'FIFTIES', label: '50대 (50~59세)' },
 ];
 
 const PREFERRED_GENDER_OPTIONS = [
   { value: 'FEMALE', label: '여성' },
-  { value: 'MALE', label: '남성' }
+  { value: 'MALE', label: '남성' },
 ];
 
 const PREFERRED_EXPERIENCE_OPTIONS = [
   { value: 'UNDER_1', label: '신입 ~ 1년 미만' },
   { value: 'FROM_2_TO_5', label: '2년 ~ 5년 미만' },
   { value: 'FROM_5_TO_9', label: '5년 ~ 9년 미만' },
-  { value: 'OVER_10', label: '10년 이상' }
+  { value: 'OVER_10', label: '10년 이상' },
 ];
 
 const PREFERRED_NATIONALITY_OPTIONS = [
   { value: 'KOREAN', label: '내국인' },
-  { value: 'FOREIGNER', label: '외국인' }
+  { value: 'FOREIGNER', label: '외국인' },
 ];
 
 function emptyChild() {
-  return { id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()), birthDate: '', gender: '' };
+  return {
+    id:
+      typeof crypto !== 'undefined' && crypto.randomUUID
+        ? crypto.randomUUID()
+        : String(Date.now()),
+    birthDate: '',
+    gender: '',
+  };
 }
 
 function PreferredRadioGroup({ label, name, options, value, onChange }) {
   return (
-    <div style={{ marginBottom: 12 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 6 }}>{label}</div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+    <div style={{ marginBottom: 18 }}>
+      <div className="bp-block-title" style={{ marginBottom: 10 }}>
+        {label}
+      </div>
+      <div className="bp-chip-row">
         {options.map((opt) => {
           const on = value === opt.value;
           return (
-            <label
-              key={opt.value}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '6px 12px',
-                borderRadius: 999,
-                border: on ? '1.5px solid #c73d6a' : '1px solid rgba(26,21,35,0.18)',
-                background: on ? 'rgba(199, 61, 106, 0.08)' : '#fff',
-                cursor: 'pointer',
-                fontSize: 12,
-                fontWeight: on ? 700 : 500,
-                color: on ? '#c73d6a' : '#1a1523'
-              }}
-            >
+            <label key={opt.value} className={`bp-radio-chip ${on ? 'is-on' : ''}`}>
               <input
                 type="radio"
                 name={name}
                 value={opt.value}
                 checked={on}
                 onChange={() => onChange(opt.value)}
-                style={{ accentColor: '#c73d6a' }}
               />
               {opt.label}
             </label>
           );
         })}
         {value ? (
-          <button
-            type="button"
-            className="btn"
-            style={{ fontSize: 11, borderRadius: 999, padding: '4px 10px' }}
-            onClick={() => onChange('')}
-          >
+          <button type="button" className="btn" onClick={() => onChange('')}>
             선택 해제
           </button>
         ) : null}
@@ -118,7 +106,7 @@ function applyServerProfile(setters, res) {
     setPreferredSitterNationality,
     setPreferredRegionSido,
     setPreferredRegionSigungu,
-    setPreferredRegionDong
+    setPreferredRegionDong,
   } = setters;
   setPhone(res?.phoneNumber ?? '');
   setChildNote(res?.childNote ?? '');
@@ -134,9 +122,9 @@ function applyServerProfile(setters, res) {
       ? ch.map((c) => ({
           id: c.id,
           birthDate: c.birthDate ?? '',
-          gender: c.gender ?? ''
+          gender: c.gender ?? '',
         }))
-      : []
+      : [],
   );
   setKeywords(Array.isArray(res?.expectationKeywords) ? [...res.expectationKeywords] : []);
   setSitterMessage(res?.sitterMessage ?? '');
@@ -203,7 +191,7 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
 
   const sidoOptions = useMemo(
     () => [{ value: '', label: '시·도 선택' }, ...SIDO_LIST.map((s) => ({ value: s, label: s }))],
-    []
+    [],
   );
 
   const preferredSigunguOptions = useMemo(() => {
@@ -219,7 +207,10 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
     }
     const list = listDong(preferredRegionSido, preferredRegionSigungu);
     if (!list.length) return [{ value: '', label: '목록 없음' }];
-    return [{ value: '', label: '동·읍·면 선택 (선택 사항)' }, ...list.map((s) => ({ value: s, label: s }))];
+    return [
+      { value: '', label: '동·읍·면 선택 (선택 사항)' },
+      ...list.map((s) => ({ value: s, label: s })),
+    ];
   }, [preferredRegionSido, preferredRegionSigungu]);
 
   const onPreferredSidoChange = (v) => {
@@ -256,12 +247,15 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
           setPreferredSitterNationality,
           setPreferredRegionSido,
           setPreferredRegionSigungu,
-          setPreferredRegionDong
+          setPreferredRegionDong,
         },
-        res
+        res,
       );
     } catch (e) {
-      if (e instanceof ApiError && (e.status === 404 || (e.message && e.message.includes('부모 프로필이 존재하지 않습니다')))) {
+      if (
+        e instanceof ApiError &&
+        (e.status === 404 || (e.message && e.message.includes('부모 프로필이 존재하지 않습니다')))
+      ) {
         setLoadError('');
         return;
       }
@@ -294,7 +288,7 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
       .map((c) => ({
         id: c.id,
         birthDate: c.birthDate,
-        gender: (c.gender || '').trim() || null
+        gender: (c.gender || '').trim() || null,
       }));
     let care = null;
     if (completeChildren.length === 1) {
@@ -316,14 +310,13 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
       children: completeChildren,
       expectationKeywords: keywords,
       sitterMessage: (sitterMessage || '').trim() || null,
-      // ===== 시터 매칭용 필수 조건 =====
       preferredSitterAgeRange: preferredSitterAgeRange || null,
       preferredSitterGender: preferredSitterGender || null,
       preferredSitterExperience: preferredSitterExperience || null,
       preferredSitterNationality: preferredSitterNationality || null,
       preferredRegionSido: (preferredRegionSido || '').trim() || null,
       preferredRegionSigungu: (preferredRegionSigungu || '').trim() || null,
-      preferredRegionDong: (preferredRegionDong || '').trim() || null
+      preferredRegionDong: (preferredRegionDong || '').trim() || null,
     };
   }, [
     phone,
@@ -343,17 +336,13 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
     preferredSitterNationality,
     preferredRegionSido,
     preferredRegionSigungu,
-    preferredRegionDong
+    preferredRegionDong,
   ]);
 
   const validateForTab = (tabId) => {
-    if (!phone.trim()) {
-      return '전화번호를 입력해주세요. (지역 선택 탭)';
-    }
+    if (!phone.trim()) return '전화번호를 입력해주세요. (지역 선택 탭)';
     if (tabId === 'REGION') {
-      if (!sido || !sigungu || !dong) {
-        return '시·도 / 시·군·구 / 동·읍·면을 모두 선택해주세요.';
-      }
+      if (!sido || !sigungu || !dong) return '시·도 / 시·군·구 / 동·읍·면을 모두 선택해주세요.';
     }
     if (tabId === 'CHILDREN') {
       for (const c of children) {
@@ -363,25 +352,17 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
       }
     }
     if (tabId === 'WORK') {
-      if (!parentWorkType) {
-        return '맞벌이 또는 전업 주부 여부를 선택해주세요.';
-      }
+      if (!parentWorkType) return '맞벌이 또는 전업 주부 여부를 선택해주세요.';
     }
     if (tabId === 'CARE') {
       const complete = children.filter((c) => (c.birthDate || '').trim());
-      if (complete.length > 1 && !careChildId) {
-        return '돌봄이 필요한 아이를 한 명 선택해주세요.';
-      }
+      if (complete.length > 1 && !careChildId) return '돌봄이 필요한 아이를 한 명 선택해주세요.';
     }
     if (tabId === 'SCHEDULE') {
-      if (!scheduleType) {
-        return '일정 유형을 선택해주세요.';
-      }
+      if (!scheduleType) return '일정 유형을 선택해주세요.';
     }
     if (tabId === 'MESSAGE') {
-      if ((childNote || '').length > 200) {
-        return '추가 메모는 200자 이하여야 합니다.';
-      }
+      if ((childNote || '').length > 200) return '추가 메모는 200자 이하여야 합니다.';
     }
     return '';
   };
@@ -414,9 +395,9 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
           setPreferredSitterNationality,
           setPreferredRegionSido,
           setPreferredRegionSigungu,
-          setPreferredRegionDong
+          setPreferredRegionDong,
         },
-        res
+        res,
       );
       onAuthChanged?.();
       onToast?.({ type: 'success', title: '저장', message: '부모 프로필이 저장되었습니다.' });
@@ -465,7 +446,11 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
     setKeywords((prev) => {
       if (prev.includes(k)) return prev.filter((x) => x !== k);
       if (prev.length >= 5) {
-        onToast?.({ type: 'error', title: '선택 제한', message: '키워드는 최대 5개까지 선택할 수 있습니다.' });
+        onToast?.({
+          type: 'error',
+          title: '선택 제한',
+          message: '키워드는 최대 5개까지 선택할 수 있습니다.',
+        });
         return prev;
       }
       return [...prev, k];
@@ -490,36 +475,21 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
   };
 
   const scheduleCards = [
-    {
-      id: 'REGULAR',
-      title: '정기적인 일정',
-      desc: '정해진 일정에 맞춰 일할 분을 찾아요',
-      icon: '📅'
-    },
-    {
-      id: 'SPECIFIC',
-      title: '특정일 일정',
-      desc: '필요한 날짜만 일할 분을 찾아요',
-      icon: '⏰'
-    },
-    {
-      id: 'UNDECIDED',
-      title: '일정 미정',
-      desc: '아직 일정이 정해지지 않았어요',
-      icon: '⏳'
-    }
+    { id: 'REGULAR', title: '정기적인 일정', desc: '정해진 일정에 맞춰 일할 분을 찾아요', icon: '📅' },
+    { id: 'SPECIFIC', title: '특정일 일정', desc: '필요한 날짜만 일할 분을 찾아요', icon: '⏰' },
+    { id: 'UNDECIDED', title: '일정 미정', desc: '아직 일정이 정해지지 않았어요', icon: '⏳' },
   ];
 
   return (
     <div>
-      <div style={{ fontWeight: 800, marginBottom: 10 }}>부모 프로필</div>
-      <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 12 }}>
+      <h2 className="bp-section-title">부모 프로필</h2>
+      <p className="bp-section-sub">
         아래 탭별로 정보를 입력한 뒤 <strong>저장</strong>을 누르면 서버에 반영됩니다.
-      </div>
+      </p>
 
       {loadError ? <div className="error">{loadError}</div> : null}
 
-      <div className="row" style={{ flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
+      <div className="bp-tab-row">
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -539,21 +509,23 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
 
       {tab === 'REGION' ? (
         <div>
-          <div style={{ fontWeight: 800, marginBottom: 8 }}>맘시터가 방문할 곳</div>
-          <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 12 }}>
-            선택한 지역을 기준으로 맘시터를 찾을 수 있어요.
-          </div>
-          <TextInput label="전화번호" value={phone} onChange={setPhone} placeholder="010-0000-0000" />
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-              gap: 10,
-              marginTop: 8
-            }}
-          >
+          <h3 className="bp-section-title">맘시터가 방문할 곳</h3>
+          <p className="bp-section-sub">선택한 지역을 기준으로 맘시터를 찾을 수 있어요.</p>
+
+          <TextInput
+            label="전화번호"
+            value={phone}
+            onChange={setPhone}
+            placeholder="010-0000-0000"
+          />
+          <div className="bp-grid" style={{ marginTop: 8 }}>
             <Select label="시·도" value={sido} onChange={onSidoChange} options={sidoOptions} />
-            <Select label="시·군·구" value={sigungu} onChange={onSigunguChange} options={sigunguOptions} />
+            <Select
+              label="시·군·구"
+              value={sigungu}
+              onChange={onSigunguChange}
+              options={sigunguOptions}
+            />
             <Select label="동·읍·면" value={dong} onChange={setDong} options={dongOptions} />
           </div>
         </div>
@@ -561,32 +533,28 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
 
       {tab === 'CHILDREN' ? (
         <div>
-          <div style={{ fontWeight: 800, marginBottom: 8 }}>아이 정보를 등록해주세요</div>
-          <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 12 }}>
-            생년월일을 입력해주세요. (최대 5명)
-          </div>
+          <h3 className="bp-section-title">아이 정보를 등록해주세요</h3>
+          <p className="bp-section-sub">생년월일을 입력해주세요. (최대 5명)</p>
+
           {children.map((c, idx) => (
-            <div
-              key={c.id}
-              style={{
-                border: '1px solid rgba(199, 61, 106, 0.18)',
-                borderRadius: 12,
-                padding: 12,
-                marginBottom: 10,
-                background: 'rgba(255, 255, 255, 0.9)'
-              }}
-            >
+            <div key={c.id} className="bp-block">
               <div className="row" style={{ justifyContent: 'space-between', marginBottom: 8 }}>
-                <span style={{ fontWeight: 800 }}>아이 {idx + 1}</span>
+                <span className="bp-block-title" style={{ margin: 0 }}>
+                  아이 {idx + 1}
+                </span>
                 <button type="button" className="btn" onClick={() => removeChild(c.id)}>
                   삭제
                 </button>
               </div>
               <div className="field">
                 <label>생년월일</label>
-                <input type="date" value={c.birthDate} onChange={(e) => updateChild(c.id, { birthDate: e.target.value })} />
+                <input
+                  type="date"
+                  value={c.birthDate}
+                  onChange={(e) => updateChild(c.id, { birthDate: e.target.value })}
+                />
               </div>
-              <div style={{ marginTop: 8, fontSize: 12, color: 'rgba(26,21,35,0.58)' }}>성별</div>
+              <div className="bp-help" style={{ marginTop: 8 }}>성별</div>
               <div className="row" style={{ marginTop: 6 }}>
                 <button
                   type="button"
@@ -605,29 +573,39 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
               </div>
             </div>
           ))}
-          <button type="button" className="btn accent" onClick={addChildRow} disabled={children.length >= 5}>
-            + 아이 추가
-          </button>
+
+          <div style={{ textAlign: 'center', marginTop: 6 }}>
+            <button
+              type="button"
+              className="btn accent"
+              onClick={addChildRow}
+              disabled={children.length >= 5}
+            >
+              + 아이 추가
+            </button>
+          </div>
         </div>
       ) : null}
 
       {tab === 'WORK' ? (
         <div>
-          <div style={{ fontWeight: 800, marginBottom: 8 }}>부모 가구 형태</div>
-          <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 12 }}>해당하는 항목을 한 가지 선택해주세요.</div>
-          <div className="row" style={{ flexWrap: 'wrap', gap: 10 }}>
+          <h3 className="bp-section-title">부모 가구 형태</h3>
+          <p className="bp-section-sub">해당하는 항목을 한 가지 선택해주세요.</p>
+
+          <div
+            className="row"
+            style={{ justifyContent: 'center', flexWrap: 'wrap', gap: 12 }}
+          >
             <button
               type="button"
-              className={`btn ${parentWorkType === 'DUAL_INCOME' ? 'primary' : ''}`}
-              style={{ minWidth: 140, minHeight: 72 }}
+              className={`bp-big-choice ${parentWorkType === 'DUAL_INCOME' ? 'is-on' : ''}`}
               onClick={() => setParentWorkType('DUAL_INCOME')}
             >
               맞벌이
             </button>
             <button
               type="button"
-              className={`btn ${parentWorkType === 'HOMEMAKER' ? 'primary' : ''}`}
-              style={{ minWidth: 140, minHeight: 72 }}
+              className={`bp-big-choice ${parentWorkType === 'HOMEMAKER' ? 'is-on' : ''}`}
               onClick={() => setParentWorkType('HOMEMAKER')}
             >
               전업 주부·주부
@@ -638,21 +616,18 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
 
       {tab === 'CARE' ? (
         <div>
-          <div style={{ fontWeight: 800, marginBottom: 8 }}>돌봄이 필요한 아이를 선택해주세요</div>
-          <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 12 }}>
+          <h3 className="bp-section-title">돌봄이 필요한 아이를 선택해주세요</h3>
+          <p className="bp-section-sub">
             아이 정보 탭에서 생년월일을 입력한 아이만 여기에 표시됩니다.
-          </div>
+          </p>
+
           {children.filter((c) => (c.birthDate || '').trim()).length === 0 ? (
-            <div style={{ fontSize: 13, color: 'rgba(26,21,35,0.58)' }}>먼저 &quot;아이 정보 등록&quot; 탭에서 아이를 등록해주세요.</div>
+            <div className="bp-empty">
+              먼저 “아이 정보 등록” 탭에서 아이를 등록해주세요.
+            </div>
           ) : (
-            <div
-              style={{
-                border: '1px solid rgba(199, 61, 106, 0.18)',
-                borderRadius: 12,
-                padding: 12
-              }}
-            >
-              <div style={{ fontWeight: 700, marginBottom: 8 }}>등록한 아이</div>
+            <div className="bp-block">
+              <div className="bp-block-title">등록한 아이</div>
               {children
                 .filter((c) => (c.birthDate || '').trim())
                 .map((c) => {
@@ -661,7 +636,8 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
                   return (
                     <label
                       key={c.id}
-                      style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, cursor: 'pointer' }}
+                      className="bp-check"
+                      style={{ display: 'flex', marginBottom: 8 }}
                     >
                       <input
                         type="radio"
@@ -673,7 +649,7 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
                     </label>
                   );
                 })}
-              <div style={{ fontSize: 11, color: 'rgba(26,21,35,0.48)', marginTop: 8 }}>
+              <div className="bp-meta" style={{ marginTop: 10 }}>
                 * 한 명의 맘시터는 안전상의 이유로 아이 2명까지 돌볼 수 있어요(서비스 정책은 별도 안내를 참고하세요).
               </div>
             </div>
@@ -684,17 +660,9 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
       {tab === 'KEYWORDS' ? (
         <div>
           {/* ===== [필수 조건 선택] 섹션 ===== */}
-          <div
-            style={{
-              border: '1px solid rgba(199, 61, 106, 0.18)',
-              borderRadius: 14,
-              padding: 16,
-              marginBottom: 18,
-              background: 'rgba(255, 255, 255, 0.9)'
-            }}
-          >
-            <div style={{ fontWeight: 800, marginBottom: 6 }}>맘시터 필수 조건 선택</div>
-            <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 14 }}>
+          <div className="bp-block">
+            <div className="bp-block-title">맘시터 필수 조건 선택</div>
+            <div className="bp-block-sub">
               매칭 정확도를 높이기 위한 항목입니다. 선택하지 않은 항목은 매칭에서 무관 조건으로 처리돼요.
             </div>
 
@@ -727,18 +695,14 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
               onChange={setPreferredSitterNationality}
             />
 
-            <div style={{ marginTop: 14 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 6 }}>희망 활동 지역</div>
-              <div style={{ fontSize: 11, color: 'rgba(26,21,35,0.58)', marginBottom: 8 }}>
+            <div style={{ marginTop: 20 }}>
+              <div className="bp-block-title" style={{ marginBottom: 6 }}>
+                희망 활동 지역
+              </div>
+              <div className="bp-help" style={{ marginBottom: 12 }}>
                 동·읍·면은 선택 사항이며, 정확한 매칭을 위해 가능하면 시·군·구까지 선택해주세요.
               </div>
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-                  gap: 10
-                }}
-              >
+              <div className="bp-grid">
                 <Select
                   label="시·도"
                   value={preferredRegionSido}
@@ -762,14 +726,14 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
           </div>
 
           {/* ===== 기존: 맘시터에게 바라는 활동(키워드 칩) ===== */}
-          <div style={{ fontWeight: 800, marginBottom: 8 }}>맘시터에게 바라는 활동</div>
-          <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 8 }}>
+          <h3 className="bp-section-title is-left">맘시터에게 바라는 활동</h3>
+          <p className="bp-section-sub is-left">
             필수로 요청하고 싶은 활동을 <strong>최대 5개</strong>까지 선택해주세요.
+          </p>
+          <div className="bp-counter">
+            선택됨 <b>{keywords.length}</b> / 5
           </div>
-          <div style={{ fontSize: 12, marginBottom: 10 }}>
-            선택됨: {keywords.length}/5
-          </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          <div className="bp-chip-row">
             {PARENT_EXPECTATION_KEYWORDS.map((k) => {
               const on = keywords.includes(k);
               return (
@@ -777,7 +741,6 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
                   key={k}
                   type="button"
                   className={`btn ${on ? 'primary' : ''}`}
-                  style={{ fontSize: 12, borderRadius: 999, padding: '6px 12px' }}
                   onClick={() => toggleKeyword(k)}
                 >
                   {k}
@@ -790,32 +753,23 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
 
       {tab === 'SCHEDULE' ? (
         <div>
-          <div style={{ fontWeight: 800, marginBottom: 8 }}>맘시터가 필요한 일정</div>
-          <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 12 }}>
-            일정에 가장 적합한 맘시터 매칭에 활용됩니다.
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <h3 className="bp-section-title">맘시터가 필요한 일정</h3>
+          <p className="bp-section-sub">일정에 가장 적합한 맘시터 매칭에 활용됩니다.</p>
+
+          <div className="bp-schedule">
             {scheduleCards.map((s) => (
               <button
                 key={s.id}
                 type="button"
-                className={`btn ${scheduleType === s.id ? 'primary' : ''}`}
-                style={{
-                  textAlign: 'left',
-                  padding: 14,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
-                  justifyContent: 'space-between'
-                }}
+                className={`bp-schedule-btn ${scheduleType === s.id ? 'is-on' : ''}`}
                 onClick={() => setScheduleType(s.id)}
               >
-                <span style={{ fontSize: 22 }}>{s.icon}</span>
-                <span style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 800 }}>{s.title}</div>
-                  <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginTop: 4 }}>{s.desc}</div>
+                <span className="bp-schedule-icon" aria-hidden>{s.icon}</span>
+                <span className="bp-schedule-body">
+                  <span className="bp-schedule-title">{s.title}</span>
+                  <span className="bp-schedule-desc">{s.desc}</span>
                 </span>
-                <span aria-hidden>›</span>
+                <span className="bp-schedule-arrow" aria-hidden>›</span>
               </button>
             ))}
           </div>
@@ -824,23 +778,21 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
 
       {tab === 'MESSAGE' ? (
         <div>
-          <div style={{ fontWeight: 800, marginBottom: 8 }}>맘시터에게 전할 말이 있나요?</div>
-          <div style={{ fontSize: 12, color: 'rgba(26,21,35,0.58)', marginBottom: 12 }}>
-            마이페이지에서 언제든 수정할 수 있어요.
-          </div>
+          <h3 className="bp-section-title">맘시터에게 전할 말이 있나요?</h3>
+          <p className="bp-section-sub">마이페이지에서 언제든 수정할 수 있어요.</p>
+
           <div className="field">
             <label>메시지 (최대 2000자)</label>
             <textarea
-              style={{ width: '100%', minHeight: 160, borderRadius: 12, padding: 10, fontFamily: 'inherit' }}
+              className="bp-textarea"
               maxLength={2000}
               value={sitterMessage}
               onChange={(e) => setSitterMessage(e.target.value)}
               placeholder="예) 안녕하세요. 4살 딸 아이가 있습니다. 오후 2시부터 6시까지..."
             />
-            <div style={{ fontSize: 11, color: 'rgba(26,21,35,0.48)', textAlign: 'right' }}>
-              {sitterMessage.length} / 2000
-            </div>
+            <div className="bp-len">{sitterMessage.length} / 2000</div>
           </div>
+
           <TextInput
             label="추가 메모(선택, 200자)"
             value={childNote}
@@ -852,7 +804,7 @@ export function ParentProfileEditor({ onToast, onAuthChanged }) {
 
       <div className="divider" />
 
-      <div className="row" style={{ marginTop: 12 }}>
+      <div className="bp-cta-row">
         <button type="button" className="btn primary" onClick={commit} disabled={loading}>
           {loading ? '저장 중...' : '저장'}
         </button>

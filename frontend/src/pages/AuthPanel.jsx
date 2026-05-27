@@ -1,13 +1,12 @@
 // 회원가입/로그인 UI를 제공하는 패널입니다.
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { TextInput } from '../components/TextInput.jsx';
-import { Select } from '../components/Select.jsx';
 import { login, signUp } from '../lib/authApi.js';
 import { setAccessToken, setEmail, setName, setRole } from '../lib/storage.js';
 import { ApiError } from '../lib/api.js';
 
-// 인증 패널을 렌더링합니다.
+import './AuthPanel.css';
+
 export function AuthPanel({ onAuthChanged, onToast }) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -47,7 +46,9 @@ export function AuthPanel({ onAuthChanged, onToast }) {
     setSuccess('');
   };
 
-  const onSignUp = async () => {
+  const onSignUp = async (e) => {
+    e?.preventDefault?.();
+    if (loading) return;
     setError('');
     setSuccess('');
     setLoading(true);
@@ -56,7 +57,7 @@ export function AuthPanel({ onAuthChanged, onToast }) {
         email: signUpEmail,
         password: signUpPassword,
         name: signUpName,
-        role: signUpRole
+        role: signUpRole,
       });
       setAccessToken(res.accessToken);
       setEmail(res.email);
@@ -65,23 +66,25 @@ export function AuthPanel({ onAuthChanged, onToast }) {
       setSuccess('회원가입 성공! 토큰이 저장되었습니다.');
       onToast?.({ type: 'success', title: '회원가입', message: '회원가입 및 자동 로그인에 성공했습니다.' });
       onAuthChanged?.();
-    } catch (e) {
-      if (e instanceof ApiError) setError(e.message);
-      else setError('회원가입 중 알 수 없는 오류가 발생했습니다.');
-      onToast?.({ type: 'error', title: '회원가입 실패', message: e instanceof ApiError ? e.message : '오류가 발생했습니다.' });
+    } catch (err) {
+      const message = err instanceof ApiError ? err.message : '회원가입 중 알 수 없는 오류가 발생했습니다.';
+      setError(message);
+      onToast?.({ type: 'error', title: '회원가입 실패', message });
     } finally {
       setLoading(false);
     }
   };
 
-  const onLogin = async () => {
+  const onLogin = async (e) => {
+    e?.preventDefault?.();
+    if (loading) return;
     setError('');
     setSuccess('');
     setLoading(true);
     try {
       const res = await login({
         email: loginEmail,
-        password: loginPassword
+        password: loginPassword,
       });
       setAccessToken(res.accessToken);
       setEmail(res.email);
@@ -91,97 +94,143 @@ export function AuthPanel({ onAuthChanged, onToast }) {
       onToast?.({ type: 'success', title: '로그인', message: '로그인에 성공했습니다.' });
       onAuthChanged?.();
       navigate('/', { replace: true });
-    } catch (e) {
-      if (e instanceof ApiError) setError(e.message);
-      else setError('로그인 중 알 수 없는 오류가 발생했습니다.');
-      onToast?.({ type: 'error', title: '로그인 실패', message: e instanceof ApiError ? e.message : '오류가 발생했습니다.' });
+    } catch (err) {
+      const message = err instanceof ApiError ? err.message : '로그인 중 알 수 없는 오류가 발생했습니다.';
+      setError(message);
+      onToast?.({ type: 'error', title: '로그인 실패', message });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="authPanel">
+    <div className="basisi-auth">
       {mode === 'login' ? (
-        <div className="authCard">
-          <div className="authCardHeader">
-            <span className="authCardIcon" aria-hidden>
-              🔒
-            </span>
-            <h1 className="authCardTitle">로그인</h1>
-            <p className="authCardSubtitle">Basisi에 다시 오신 것을 환영해요</p>
-          </div>
+        <div className="ba-card" role="region" aria-label="로그인">
+          <div className="ba-icon" aria-hidden>🔒</div>
+          <h2 className="ba-title">로그인</h2>
+          <p className="ba-subtitle">Basisi에 다시 오신 것을 환영해요</p>
 
-          <div className="authForm">
-            <TextInput label="이메일" value={loginEmail} onChange={setLoginEmail} placeholder="email@example.com" />
-            <TextInput
-              label="비밀번호"
-              type="password"
-              value={loginPassword}
-              onChange={setLoginPassword}
-              placeholder="비밀번호를 입력하세요"
-            />
-            <button type="button" className="btn authSubmit" onClick={onLogin} disabled={loading}>
+          <form className="ba-form" onSubmit={onLogin} noValidate>
+            <div className="ba-field">
+              <label htmlFor="ba-login-email">이메일</label>
+              <input
+                id="ba-login-email"
+                type="email"
+                className="ba-input"
+                placeholder="email@example.com"
+                value={loginEmail}
+                onChange={(e) => setLoginEmail(e.target.value)}
+                autoComplete="email"
+                disabled={loading}
+              />
+            </div>
+
+            <div className="ba-field">
+              <label htmlFor="ba-login-password">비밀번호</label>
+              <input
+                id="ba-login-password"
+                type="password"
+                className="ba-input"
+                placeholder="비밀번호를 입력하세요"
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
+                autoComplete="current-password"
+                disabled={loading}
+              />
+            </div>
+
+            {error ? <div className="ba-message is-error" role="alert">{error}</div> : null}
+            {success ? <div className="ba-message is-success" role="status">{success}</div> : null}
+
+            <button type="submit" className="ba-submit" disabled={loading}>
               {loading ? '처리 중…' : '로그인 하기'}
             </button>
-          </div>
+          </form>
 
-          {error ? <div className="error authMessage">{error}</div> : null}
-          {success ? <div className="success authMessage">{success}</div> : null}
-
-          <p className="authFooterNote">
-            <button type="button" className="authLinkButton" onClick={switchToSignUp}>
-              계정이 없으신가요? <span className="authLinkEm">회원가입하기</span>
+          <p className="ba-footer">
+            계정이 없으신가요?
+            <button type="button" className="ba-link" onClick={switchToSignUp}>
+              회원가입하기
             </button>
           </p>
         </div>
       ) : (
-        <div className="authCard">
-          <div className="authCardHeader">
-            <span className="authCardIcon" aria-hidden>
-              ✨
-            </span>
-            <h1 className="authCardTitle">회원가입</h1>
-            <p className="authCardSubtitle">Basisi의 회원이 되어 부모와 시터를 안전하게 연결해 보세요</p>
-          </div>
+        <div className="ba-card" role="region" aria-label="회원가입">
+          <div className="ba-icon" aria-hidden>✨</div>
+          <h2 className="ba-title">회원가입</h2>
+          <p className="ba-subtitle">Basisi의 회원이 되어 부모와 시터를 안전하게 연결해 보세요</p>
 
-          <div className="authForm">
-            <TextInput label="이름" value={signUpName} onChange={setSignUpName} placeholder="홍길동" />
-            <TextInput
-              label="이메일 (로그인 ID로 사용됩니다)"
-              value={signUpEmail}
-              onChange={setSignUpEmail}
-              placeholder="email@example.com"
-            />
-            <TextInput
-              label="비밀번호 (8자 이상)"
-              type="password"
-              value={signUpPassword}
-              onChange={setSignUpPassword}
-              placeholder="비밀번호를 입력하세요"
-            />
-            <Select
-              label="역할"
-              value={signUpRole}
-              onChange={setSignUpRole}
-              options={[
-                { value: 'PARENT', label: '부모 (PARENT)' },
-                { value: 'SITTER', label: '시터 (SITTER)' }
-              ]}
-            />
-            <button type="button" className="btn authSubmit authSubmitAlt" onClick={onSignUp} disabled={loading}>
+          <form className="ba-form" onSubmit={onSignUp} noValidate>
+            <div className="ba-field">
+              <label htmlFor="ba-signup-name">이름</label>
+              <input
+                id="ba-signup-name"
+                type="text"
+                className="ba-input"
+                placeholder="홍길동"
+                value={signUpName}
+                onChange={(e) => setSignUpName(e.target.value)}
+                autoComplete="name"
+                disabled={loading}
+              />
+            </div>
+
+            <div className="ba-field">
+              <label htmlFor="ba-signup-email">이메일 (로그인 ID로 사용됩니다)</label>
+              <input
+                id="ba-signup-email"
+                type="email"
+                className="ba-input"
+                placeholder="email@example.com"
+                value={signUpEmail}
+                onChange={(e) => setSignUpEmail(e.target.value)}
+                autoComplete="email"
+                disabled={loading}
+              />
+            </div>
+
+            <div className="ba-field">
+              <label htmlFor="ba-signup-password">비밀번호 (8자 이상)</label>
+              <input
+                id="ba-signup-password"
+                type="password"
+                className="ba-input"
+                placeholder="비밀번호를 입력하세요"
+                value={signUpPassword}
+                onChange={(e) => setSignUpPassword(e.target.value)}
+                autoComplete="new-password"
+                disabled={loading}
+              />
+            </div>
+
+            <div className="ba-field">
+              <label htmlFor="ba-signup-role">역할</label>
+              <select
+                id="ba-signup-role"
+                className="ba-select"
+                value={signUpRole}
+                onChange={(e) => setSignUpRole(e.target.value)}
+                disabled={loading}
+              >
+                <option value="PARENT">부모 (PARENT)</option>
+                <option value="SITTER">시터 (SITTER)</option>
+              </select>
+              <p className="ba-hint">역할에 따라 예약·프로필 기능이 달라집니다.</p>
+            </div>
+
+            {error ? <div className="ba-message is-error" role="alert">{error}</div> : null}
+            {success ? <div className="ba-message is-success" role="status">{success}</div> : null}
+
+            <button type="submit" className="ba-submit" disabled={loading}>
               {loading ? '처리 중…' : '가입 완료하기'}
             </button>
-          </div>
+          </form>
 
-          {error ? <div className="error authMessage">{error}</div> : null}
-          {success ? <div className="success authMessage">{success}</div> : null}
-
-          <p className="authRoleHint">역할에 따라 예약·프로필 기능이 달라집니다.</p>
-
-          <p className="authFooterNote">
-            <button type="button" className="authLinkButton" onClick={switchToLogin}>
-              이미 계정이 있으신가요? <span className="authLinkEm">로그인으로 돌아가기</span>
+          <p className="ba-footer">
+            이미 계정이 있으신가요?
+            <button type="button" className="ba-link" onClick={switchToLogin}>
+              로그인으로 돌아가기
             </button>
           </p>
         </div>

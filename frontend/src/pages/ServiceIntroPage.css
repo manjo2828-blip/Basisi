@@ -1,0 +1,261 @@
+/* ============================================================
+   ServiceIntroPage — 서비스 소개 (코랄 톤 · 메인 페이지와 동일한 디자인 언어)
+   - 모든 선택자는 .basisi-about 아래로 스코프
+   ============================================================ */
+
+.basisi-about {
+  --bsa-coral: #ff6b6b;
+  --bsa-coral-light: #ff8e8e;
+  --bsa-coral-pale: #fff0f0;
+  --bsa-coral-mid: #ffd6d6;
+  --bsa-dark: #1a1a2e;
+  --bsa-gray: #6b7280;
+  --bsa-light-gray: #f8f8fa;
+  --bsa-border: #f0e8e8;
+  --bsa-white: #ffffff;
+
+  background: linear-gradient(135deg, #fff 55%, #fff5f5 100%);
+  padding: 5rem 5%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  color: var(--bsa-dark);
+  font-family: 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* siteMain 의 상하 패딩(22/60px) 상쇄 */
+  margin: -22px 0 -60px;
+  min-height: calc(100vh - 80px);
+}
+
+.basisi-about * { box-sizing: border-box; }
+
+/* ───── 메인 카드 ───── */
+.basisi-about .bsa-card {
+  background-color: var(--bsa-white);
+  width: 100%;
+  max-width: 1040px;
+  border-radius: 28px;
+  padding: 4rem 3.5rem;
+  box-shadow:
+    0 20px 60px rgba(255, 107, 107, 0.1),
+    0 4px 18px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--bsa-border);
+  text-align: center;
+  animation: bsa-fade-up 0.6s ease both;
+}
+
+/* ───── 헤더 ───── */
+.basisi-about .bsa-tag {
+  color: var(--bsa-coral);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.85rem;
+  display: block;
+}
+
+.basisi-about .bsa-title {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: var(--bsa-dark);
+  margin: 0 0 1.1rem;
+}
+
+.basisi-about .bsa-subtitle {
+  font-size: 1.02rem;
+  color: var(--bsa-gray);
+  margin: 0 auto 3.5rem;
+  border-bottom: 1px dashed var(--bsa-border);
+  padding-bottom: 2.25rem;
+  line-height: 1.65;
+  max-width: 720px;
+}
+
+/* ───── 기능 그리드 ───── */
+.basisi-about .bsa-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 20px;
+  margin-bottom: 3rem;
+}
+
+.basisi-about .bsa-feature {
+  background: var(--bsa-light-gray);
+  border: 1.5px solid transparent;
+  border-radius: 20px;
+  padding: 2rem 1.75rem;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  transition: transform 280ms, background-color 280ms, border-color 280ms, box-shadow 280ms;
+}
+
+/* 메인 페이지 step-card 와 동일한 상단 코랄 라인 */
+.basisi-about .bsa-feature::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: var(--bsa-coral);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 320ms;
+}
+
+.basisi-about .bsa-feature:hover {
+  border-color: var(--bsa-coral-mid);
+  background: var(--bsa-white);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(255, 107, 107, 0.1);
+}
+
+.basisi-about .bsa-feature:hover::before { transform: scaleX(1); }
+
+.basisi-about .bsa-feature-heading {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: var(--bsa-dark);
+  margin: 0 0 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.basisi-about .bsa-feature-desc {
+  font-size: 0.9rem;
+  color: var(--bsa-gray);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ───── 빠른 시작 박스 ───── */
+.basisi-about .bsa-quickstart {
+  background: var(--bsa-white);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1.5px solid var(--bsa-border);
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  transition: border-color 220ms, box-shadow 220ms;
+}
+
+.basisi-about .bsa-quickstart:hover {
+  border-color: var(--bsa-coral-mid);
+  box-shadow: 0 12px 28px rgba(255, 107, 107, 0.08);
+}
+
+.basisi-about .bsa-quickstart-icon {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: var(--bsa-coral-pale);
+  border: 1px solid var(--bsa-coral-mid);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.4rem;
+}
+
+.basisi-about .bsa-quickstart-body { flex: 1; min-width: 0; }
+
+.basisi-about .bsa-quickstart h4 {
+  font-size: 1.02rem;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--bsa-dark);
+  margin: 0 0 0.35rem;
+}
+
+.basisi-about .bsa-quickstart p {
+  font-size: 0.9rem;
+  color: var(--bsa-gray);
+  margin: 0;
+  line-height: 1.65;
+}
+
+.basisi-about .bsa-quickstart b { color: var(--bsa-dark); font-weight: 700; }
+
+/* ───── CTA 행 ───── */
+.basisi-about .bsa-cta-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2.5rem;
+}
+
+.basisi-about .bsa-cta-main,
+.basisi-about .bsa-cta-sec {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  transition: transform 220ms, box-shadow 220ms, background 220ms, border-color 220ms, color 220ms;
+}
+
+.basisi-about .bsa-cta-main {
+  background: var(--bsa-coral);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 18px rgba(255, 107, 107, 0.3);
+}
+
+.basisi-about .bsa-cta-main:hover {
+  background: var(--bsa-coral-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(255, 107, 107, 0.42);
+}
+
+.basisi-about .bsa-cta-sec {
+  background: var(--bsa-white);
+  color: var(--bsa-dark);
+  border: 1.5px solid var(--bsa-border);
+}
+
+.basisi-about .bsa-cta-sec:hover {
+  border-color: var(--bsa-coral);
+  color: var(--bsa-coral);
+}
+
+/* ───── 진입 애니메이션 ───── */
+@keyframes bsa-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .basisi-about .bsa-card { animation: none; }
+  .basisi-about .bsa-feature,
+  .basisi-about .bsa-quickstart { transition: none; }
+}
+
+/* ───── 반응형 ───── */
+@media (max-width: 980px) {
+  .basisi-about { padding: 3.5rem 5%; }
+  .basisi-about .bsa-card { padding: 3rem 2rem; }
+  .basisi-about .bsa-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+  .basisi-about { padding: 2.5rem 4%; }
+  .basisi-about .bsa-card { padding: 2.25rem 1.5rem; border-radius: 22px; }
+  .basisi-about .bsa-subtitle { margin-bottom: 2.25rem; padding-bottom: 1.5rem; }
+  .basisi-about .bsa-grid { gap: 14px; margin-bottom: 2.25rem; }
+  .basisi-about .bsa-feature { padding: 1.5rem 1.25rem; }
+  .basisi-about .bsa-quickstart { padding: 1.5rem; flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .basisi-about .bsa-cta-row { flex-direction: column; align-items: stretch; }
+  .basisi-about .bsa-cta-main,
+  .basisi-about .bsa-cta-sec { justify-content: center; }
+}

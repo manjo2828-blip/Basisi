@@ -1,0 +1,542 @@
+/* ============================================================
+   ReservationPanel — 예약 신청/관리 (코랄 톤 · 메인 디자인 언어)
+   - 모든 선택자는 .basisi-reserve 스코프
+   - 전역 .btn / .field / .row / .divider / .badge / .error /
+     .emptyState / .skeletonCard / .skeletonLine 룰은 이 스코프
+     안에서 코랄 톤·큰 가독성으로 재정의
+   ============================================================ */
+
+.basisi-reserve {
+  --br-coral: #ff6b6b;
+  --br-coral-light: #ff8e8e;
+  --br-coral-pale: #fff0f0;
+  --br-coral-mid: #ffd6d6;
+  --br-dark: #1a1a2e;
+  --br-gray: #6b7280;
+  --br-light-gray: #f8f8fa;
+  --br-border: #f0e8e8;
+  --br-white: #ffffff;
+  --br-info: #0c4a6e;
+  --br-info-bg: #e0f2fe;
+  --br-info-border: #bae6fd;
+  --br-success: #047857;
+  --br-success-bg: #ecfdf5;
+  --br-success-border: #a7f3d0;
+  --br-danger: #c53030;
+  --br-danger-bg: #fff5f5;
+  --br-danger-border: #fed7d7;
+  --br-warn: #92400e;
+  --br-warn-bg: #fffbeb;
+  --br-warn-border: #fde68a;
+
+  background: linear-gradient(135deg, #fff 55%, #fff5f5 100%);
+  padding: 3rem 5%;
+  min-height: calc(100vh - 80px);
+  margin: -22px 0 -60px;
+  font-family: 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--br-dark);
+}
+
+.basisi-reserve * { box-sizing: border-box; }
+
+/* ───── 외곽 카드 ───── */
+.basisi-reserve .br-shell {
+  max-width: 980px;
+  margin: 0 auto;
+  background: var(--br-white);
+  border-radius: 28px;
+  padding: 3rem 2.5rem 2.5rem;
+  box-shadow:
+    0 20px 60px rgba(255, 107, 107, 0.1),
+    0 4px 18px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--br-border);
+  animation: br-fade-up 0.5s ease both;
+}
+
+@keyframes br-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .basisi-reserve .br-shell { animation: none; }
+}
+
+/* ───── 페이지 헤더 ───── */
+.basisi-reserve .br-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.basisi-reserve .br-title {
+  font-size: clamp(1.85rem, 2.8vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: var(--br-dark);
+  margin: 0 0 0.55rem;
+}
+
+.basisi-reserve .br-subtitle {
+  font-size: 1.05rem;
+  color: var(--br-gray);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ───── 섹션 헤더 ───── */
+.basisi-reserve .br-section-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: var(--br-dark);
+  margin: 0 0 1rem;
+  text-align: center;
+}
+
+.basisi-reserve .br-section-title.is-left { text-align: left; }
+
+/* ───── 정보 행(이메일·역할 배지·새로고침) ───── */
+.basisi-reserve .br-info-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+/* ───── 전역 row/divider 재정의 ───── */
+.basisi-reserve .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.basisi-reserve .divider {
+  border-top: 1px solid var(--br-border);
+  margin: 1.75rem 0;
+  height: 0;
+}
+
+/* ───── 전역 .badge 재정의 ───── */
+.basisi-reserve .badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  background: var(--br-coral-pale);
+  color: var(--br-coral);
+  border: 1px solid var(--br-coral-mid);
+  letter-spacing: 0.2px;
+}
+
+/* status별 강조 */
+.basisi-reserve .badge.is-status-requested {
+  background: var(--br-warn-bg);
+  color: var(--br-warn);
+  border-color: var(--br-warn-border);
+}
+.basisi-reserve .badge.is-status-accepted {
+  background: var(--br-success-bg);
+  color: var(--br-success);
+  border-color: var(--br-success-border);
+}
+.basisi-reserve .badge.is-status-rejected,
+.basisi-reserve .badge.is-status-cancelled {
+  background: var(--br-light-gray);
+  color: var(--br-gray);
+  border-color: var(--br-border);
+}
+.basisi-reserve .badge.is-info {
+  background: var(--br-info-bg);
+  color: var(--br-info);
+  border-color: var(--br-info-border);
+}
+
+/* ───── 전역 .error 재정의 ───── */
+.basisi-reserve .error {
+  background: var(--br-danger-bg);
+  color: var(--br-danger);
+  border: 1px solid var(--br-danger-border);
+  border-radius: 12px;
+  padding: 0.85rem 1.15rem;
+  font-size: 1rem;
+  line-height: 1.55;
+  margin: 0.75rem 0 0;
+}
+
+/* ───── 빈 상태 ───── */
+.basisi-reserve .emptyState {
+  margin-top: 12px;
+  padding: 2.25rem 1.75rem;
+  border-radius: 14px;
+  border: 1.5px dashed var(--br-coral-mid);
+  text-align: center;
+  font-size: 1.05rem;
+  color: var(--br-gray);
+  background: var(--br-coral-pale);
+  line-height: 1.6;
+}
+
+.basisi-reserve .emptyState b { color: var(--br-coral); font-weight: 800; }
+
+/* ───── 스켈레톤 ───── */
+.basisi-reserve .skeletonCard {
+  background: var(--br-white);
+  border: 1px solid var(--br-border);
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+}
+
+.basisi-reserve .skeletonLine {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f5f5f7 0%, #ececef 50%, #f5f5f7 100%);
+  background-size: 200% 100%;
+  animation: br-shimmer 1.4s linear infinite;
+}
+
+@keyframes br-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ───── 전역 .btn 재정의 ───── */
+.basisi-reserve .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--br-border);
+  background: var(--br-white);
+  color: var(--br-dark);
+  font-size: 1.02rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: -0.2px;
+  transition: background-color 180ms, border-color 180ms, color 180ms, box-shadow 180ms, transform 180ms;
+  line-height: 1.3;
+}
+
+.basisi-reserve .btn:hover:not(:disabled) {
+  border-color: var(--br-coral-mid);
+  color: var(--br-coral);
+}
+
+.basisi-reserve .btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: var(--br-light-gray);
+  color: var(--br-gray);
+}
+
+.basisi-reserve .btn.primary {
+  background: var(--br-coral);
+  border-color: var(--br-coral);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(255, 107, 107, 0.28);
+}
+
+.basisi-reserve .btn.primary:hover:not(:disabled) {
+  background: var(--br-coral-light);
+  border-color: var(--br-coral-light);
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(255, 107, 107, 0.36);
+  transform: translateY(-1px);
+}
+
+.basisi-reserve .btn.accent {
+  background: var(--br-coral-pale);
+  border-color: var(--br-coral-mid);
+  color: var(--br-coral);
+  font-weight: 700;
+}
+
+.basisi-reserve .btn.accent:hover:not(:disabled) {
+  background: var(--br-coral-mid);
+  border-color: var(--br-coral);
+  color: var(--br-coral);
+}
+
+.basisi-reserve .btn.lg {
+  padding: 1rem 2.4rem;
+  font-size: 1.15rem;
+}
+
+.basisi-reserve .btn.danger {
+  background: #fff;
+  border-color: var(--br-danger-border);
+  color: var(--br-danger);
+  font-weight: 700;
+}
+
+.basisi-reserve .btn.danger:hover:not(:disabled) {
+  background: var(--br-danger-bg);
+  border-color: var(--br-danger);
+}
+
+/* ───── 전역 .field 재정의 (TextInput/Select 내부 단일 .field 기준) ───── */
+.basisi-reserve .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.basisi-reserve .field > label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--br-gray);
+  padding-left: 4px;
+}
+
+.basisi-reserve .field input,
+.basisi-reserve .field select,
+.basisi-reserve .field textarea {
+  width: 100%;
+  padding: 0.9rem 1.15rem;
+  font-size: 1.05rem;
+  border: 1.5px solid var(--br-border);
+  border-radius: 12px;
+  background: var(--br-light-gray);
+  color: var(--br-dark);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 180ms, background-color 180ms, box-shadow 180ms;
+}
+
+.basisi-reserve .field input::placeholder { color: #c4c8d0; }
+
+.basisi-reserve .field input:hover:not(:disabled),
+.basisi-reserve .field select:hover:not(:disabled),
+.basisi-reserve .field textarea:hover:not(:disabled) {
+  border-color: var(--br-coral-mid);
+}
+
+.basisi-reserve .field input:focus,
+.basisi-reserve .field select:focus,
+.basisi-reserve .field textarea:focus {
+  border-color: var(--br-coral);
+  background: var(--br-white);
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.12);
+}
+
+/* datetime-local 캘린더 아이콘 색을 코랄 톤으로 살짝 강조 */
+.basisi-reserve .field input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(45%) sepia(78%) saturate(2270%) hue-rotate(327deg) brightness(95%) contrast(99%);
+  cursor: pointer;
+}
+
+/* ───── 예약 신청 폼 (컴팩트 세로 흐름) ───── */
+.basisi-reserve .br-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 0.5rem;
+}
+
+.basisi-reserve .br-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.basisi-reserve .br-form-row > .field {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.basisi-reserve .br-form-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.6rem;
+}
+
+.basisi-reserve .br-hint {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--br-gray);
+  background: var(--br-light-gray);
+  border: 1px dashed var(--br-border);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.basisi-reserve .br-hint code {
+  background: #fff;
+  border: 1px solid var(--br-border);
+  border-radius: 6px;
+  padding: 1px 6px;
+  margin: 0 2px;
+  font-size: 0.92rem;
+  color: var(--br-coral);
+  font-family: 'Menlo', monospace;
+}
+
+.basisi-reserve .br-picked {
+  background: linear-gradient(135deg, var(--br-coral-pale) 0%, #fffaf6 100%);
+  border: 1.5px solid var(--br-coral-mid);
+  color: var(--br-dark);
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.6rem;
+  font-size: 1rem;
+  line-height: 1.55;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.basisi-reserve .br-picked b { color: var(--br-coral); font-weight: 800; }
+
+/* ───── 예약 카드 리스트 ───── */
+.basisi-reserve .br-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 0.4rem;
+}
+
+.basisi-reserve .br-card {
+  border: 1.5px solid var(--br-border);
+  border-radius: 18px;
+  padding: 1.2rem 1.35rem;
+  background: var(--br-white);
+  transition: border-color 200ms, box-shadow 200ms;
+}
+
+.basisi-reserve .br-card:hover {
+  border-color: var(--br-coral-mid);
+  box-shadow: 0 10px 26px rgba(255, 107, 107, 0.08);
+}
+
+.basisi-reserve .br-card-head {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.basisi-reserve .br-card-title {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--br-dark);
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  letter-spacing: -0.2px;
+}
+
+.basisi-reserve .br-card-meta {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: var(--br-gray);
+  line-height: 1.6;
+}
+
+.basisi-reserve .br-card-meta b { color: var(--br-dark); font-weight: 700; }
+
+.basisi-reserve .br-card-note {
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: var(--br-dark);
+  line-height: 1.6;
+  background: var(--br-light-gray);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+}
+
+.basisi-reserve .br-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* ───── 리뷰 영역 ───── */
+.basisi-reserve .br-review {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--br-coral-mid);
+}
+
+.basisi-reserve .br-review-title {
+  font-weight: 800;
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+  color: var(--br-dark);
+  letter-spacing: -0.2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.basisi-reserve .br-review-title::before {
+  content: '⭐';
+  font-size: 1.1rem;
+}
+
+.basisi-reserve .br-review-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.basisi-reserve .br-review-row .field { margin-bottom: 0; }
+
+.basisi-reserve .br-review-row .br-review-rating {
+  flex: 0 0 160px;
+  min-width: 140px;
+}
+
+.basisi-reserve .br-review-row .br-review-comment {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.basisi-reserve .br-review-cta {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+/* ───── 반응형 ───── */
+@media (max-width: 960px) {
+  .basisi-reserve .br-shell { padding: 2.25rem 1.75rem 2rem; }
+  .basisi-reserve .br-title { font-size: 1.75rem; }
+  .basisi-reserve .br-section-title { font-size: 1.25rem; }
+  .basisi-reserve .br-card-title { font-size: 1.05rem; }
+  .basisi-reserve .btn { font-size: 0.96rem; padding: 0.65rem 1.25rem; }
+  .basisi-reserve .btn.lg { font-size: 1.05rem; padding: 0.9rem 2rem; }
+  .basisi-reserve .field input,
+  .basisi-reserve .field select,
+  .basisi-reserve .field textarea { font-size: 1rem; padding: 0.8rem 1.05rem; }
+}
+
+@media (max-width: 760px) {
+  .basisi-reserve { padding: 2rem 4%; }
+  .basisi-reserve .br-shell { padding: 1.75rem 1.25rem 1.75rem; border-radius: 22px; }
+  .basisi-reserve .br-form-row > .field { flex: 1 1 100%; }
+  .basisi-reserve .br-form-cta .btn { width: 100%; }
+  .basisi-reserve .br-card-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .basisi-reserve .br-review-row .br-review-rating,
+  .basisi-reserve .br-review-row .br-review-comment { flex: 1 1 100%; }
+  .basisi-reserve .br-review-cta { justify-content: stretch; }
+  .basisi-reserve .br-review-cta .btn { width: 100%; }
+  .basisi-reserve .br-info-row { flex-direction: column; align-items: stretch; }
+  .basisi-reserve .br-info-row .btn { width: 100%; }
+}

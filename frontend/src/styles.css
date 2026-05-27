@@ -129,21 +129,21 @@ a {
   width: 100%;
 }
 
-/* 미니멀 헤더: 로고+메뉴(왼쪽) · 로그인(오른쪽) — 여유 높이·큰 타입(참고형 상단바) */
+/* 상단바: 로고+메뉴(왼쪽) · 로그인(오른쪽) — 원본의 약 2배 스케일 */
 .headerBar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: 28px;
   flex-wrap: wrap;
-  padding: 40px 0 44px;
+  padding: 26px 0;
   margin: 0;
 }
 
 .headerBarMain {
   display: flex;
   align-items: center;
-  gap: clamp(24px, 4.2vw, 56px);
+  gap: clamp(32px, 5vw, 64px);
   flex: 1;
   min-width: 0;
 }
@@ -151,46 +151,46 @@ a {
 .siteBrand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   text-decoration: none;
   color: inherit;
   flex-shrink: 0;
 }
 
 .siteBrandIcon {
-  font-size: 42px;
+  font-size: 50px;
   line-height: 1;
 }
 
 .siteBrandWord {
-  font-size: 32px;
-  font-weight: 400;
+  font-size: 44px;
+  font-weight: 800;
   font-style: normal;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   line-height: 1.1;
 }
 
 .siteBrandWordBase {
-  color: #2b2b2b;
+  color: #1a1a2e;
 }
 
 .siteBrandWordAccent {
-  color: #d14b78;
+  color: #ff6b6b;
 }
 
 .headerNav {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: clamp(16px, 2.8vw, 36px);
+  gap: clamp(22px, 3.4vw, 44px);
 }
 
 .navLinkBar {
   text-decoration: none;
-  font-size: 20px;
-  font-weight: 400;
-  color: #2b2b2b;
-  padding: 12px 8px 16px;
+  font-size: 30px;
+  font-weight: 600;
+  color: #6b7280;
+  padding: 12px 8px 14px;
   border: none;
   background: none;
   border-radius: 0;
@@ -201,13 +201,13 @@ a {
 }
 
 .navLinkBar:hover {
-  color: rgba(43, 43, 43, 0.72);
+  color: #1a1a2e;
 }
 
 .navLinkBar.is-active {
-  color: #c73d6a;
-  font-weight: 400;
-  border-bottom-color: #c73d6a;
+  color: #ff6b6b;
+  font-weight: 700;
+  border-bottom-color: #ff6b6b;
 }
 
 .headerBarAuth {
@@ -227,41 +227,50 @@ a {
 .accountMenuPopover {
   position: absolute;
   right: 0;
-  top: calc(100% + 10px);
-  width: 220px;
+  top: calc(100% + 12px);
+  width: 268px;
   background: #ffffff;
-  border: 1px solid rgba(26, 21, 35, 0.12);
-  border-radius: 16px;
-  box-shadow: 0 18px 48px rgba(26, 21, 35, 0.16);
-  padding: 12px;
+  border: 1.5px solid #f0e8e8;
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(255, 107, 107, 0.18), 0 5px 18px rgba(26, 21, 35, 0.06);
+  padding: 14px;
   z-index: 3000;
+  animation: bbAccountMenuPop 0.18s ease-out both;
+}
+
+@keyframes bbAccountMenuPop {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .accountMenuHeader {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 6px 8px;
+  gap: 12px;
+  padding: 8px 6px 10px;
 }
 
 .accountMenuAvatar {
-  width: 44px;
-  height: 44px;
+  width: 50px;
+  height: 50px;
   border-radius: 999px;
-  border: 1px solid rgba(26, 21, 35, 0.12);
-  background: linear-gradient(135deg, rgba(199, 61, 106, 0.18), rgba(255, 112, 166, 0.10));
+  border: 1.5px solid #ffd6d6;
+  background: linear-gradient(135deg, #fff0f0 0%, #ffd6d6 100%);
+  box-shadow: 0 5px 14px rgba(255, 107, 107, 0.2);
+  flex-shrink: 0;
 }
 
 .accountMenuName {
-  font-size: 16px;
-  font-weight: 700;
-  color: rgba(43, 43, 43, 0.92);
+  font-size: 17px;
+  font-weight: 800;
+  color: #1a1a2e;
+  letter-spacing: -0.3px;
 }
 
 .accountMenuDivider {
   height: 1px;
-  background: rgba(26, 21, 35, 0.12);
-  margin: 8px 0;
+  background: #f0e8e8;
+  margin: 9px 0;
 }
 
 .accountMenuItem {
@@ -271,52 +280,65 @@ a {
   background: none;
   border: none;
   border-radius: 12px;
-  padding: 10px 10px;
+  padding: 12px 14px;
   cursor: pointer;
-  font-size: 14px;
-  color: rgba(43, 43, 43, 0.86);
+  font-size: 16px;
+  font-weight: 500;
+  color: #1a1a2e;
+  font-family: inherit;
+  transition: background-color 160ms, color 160ms;
+  letter-spacing: -0.2px;
 }
 
 .accountMenuItem:hover {
-  background: rgba(199, 61, 106, 0.08);
-  color: rgba(43, 43, 43, 0.96);
+  background: #fff0f0;
+  color: #ff6b6b;
+  font-weight: 600;
 }
 
 .headerUserGreeting {
-  font-size: 20px;
-  font-weight: 500;
-  color: rgba(42, 42, 42, 0.72);
+  font-size: 30px;
+  font-weight: 700;
+  color: #1a1a2e;
   white-space: nowrap;
 }
 
 .headerAuthGroup {
   display: inline-flex;
   align-items: center;
-  gap: 18px;
+  gap: 22px;
 }
 
 .headerAuthLink {
   display: inline-block;
   text-decoration: none;
-  font-size: 20px;
-  font-weight: 400;
-  color: rgba(42, 42, 42, 0.52);
+  font-size: 28px;
+  font-weight: 600;
+  color: #6b7280;
   padding: 12px 8px;
   border: none;
   background: none;
   cursor: pointer;
   font-family: inherit;
   transition: color 0.15s ease;
+  letter-spacing: -0.3px;
 }
 
 .headerAuthLink:hover {
-  color: rgba(42, 42, 42, 0.88);
+  color: #1a1a2e;
 }
 
 .headerAuthLink.is-active {
-  color: #c73d6a;
-  font-weight: 400;
+  color: #ff6b6b;
+  font-weight: 700;
 }
+
+.accountMenuTrigger {
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.accountMenuTrigger:hover { color: #ff6b6b; }
 
 /* 우측 중앙 퀵 메뉴(시터검색/예약) */
 .quickDock {
@@ -331,37 +353,38 @@ a {
 }
 
 .quickDockItem {
-  width: 108px;
-  height: 88px;
+  width: 96px;
+  height: 84px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   text-decoration: none;
   background: #ffffff;
-  border: 1px solid rgba(26, 21, 35, 0.12);
-  border-radius: 16px;
-  box-shadow: 0 12px 34px rgba(26, 21, 35, 0.12);
-  color: rgba(43, 43, 43, 0.72);
+  border: 1.5px solid #f0e8e8;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(26, 21, 35, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+  color: #1a1a2e;
+  font-weight: 600;
   transition:
-    transform 0.12s ease,
-    border-color 0.12s ease,
-    box-shadow 0.12s ease,
-    color 0.12s ease;
+    transform 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    color 0.16s ease;
 }
 
 .quickDockItem:hover {
   transform: translateY(-2px);
-  border-color: rgba(199, 61, 106, 0.25);
-  box-shadow: 0 16px 44px rgba(26, 21, 35, 0.14);
-  color: rgba(43, 43, 43, 0.9);
+  border-color: #ffd6d6;
+  box-shadow: 0 16px 36px rgba(255, 107, 107, 0.16), 0 4px 12px rgba(0, 0, 0, 0.04);
+  color: #ff6b6b;
 }
 
 .quickDockItem.is-active {
-  border-color: rgba(199, 61, 106, 0.45);
-  box-shadow: 0 18px 48px rgba(199, 61, 106, 0.18);
-  color: #c73d6a;
+  border-color: #ff6b6b;
+  box-shadow: 0 14px 36px rgba(255, 107, 107, 0.28);
+  color: #ff6b6b;
 }
 
 .quickDockIcon {
@@ -376,57 +399,55 @@ a {
 }
 
 @media (max-width: 860px) {
-  .quickDock {
-    right: 14px;
-  }
+  .quickDock { right: 14px; }
   .quickDockItem {
     width: 92px;
     height: 78px;
     gap: 8px;
   }
-  .quickDockLabel {
-    font-size: 13px;
+  .quickDockLabel { font-size: 13px; }
+}
+
+@media (max-width: 960px) {
+  .headerBar {
+    padding: 18px 0;
+    gap: 18px;
   }
+
+  .siteBrandIcon { font-size: 36px; }
+  .siteBrandWord { font-size: 32px; }
+  .navLinkBar { font-size: 22px; padding: 8px 6px 12px; }
+  .headerAuthLink { font-size: 20px; padding: 10px 6px; }
+  .headerUserGreeting { font-size: 22px; }
+  .accountMenuItem { font-size: 15px; padding: 11px 13px; }
+  .accountMenuName { font-size: 16px; }
 }
 
 @media (max-width: 640px) {
   .headerBar {
-    padding: 28px 0 32px;
-    gap: 18px;
+    padding: 13px 0;
+    gap: 12px;
   }
 
-  .siteBrandIcon {
-    font-size: 36px;
-  }
-
-  .siteBrandWord {
-    font-size: 26px;
-  }
-
-  .navLinkBar {
-    font-size: 18px;
-    padding: 10px 6px 12px;
-  }
-
-  .headerAuthLink {
-    font-size: 18px;
-  }
+  .siteBrandIcon { font-size: 26px; }
+  .siteBrandWord { font-size: 24px; }
+  .navLinkBar { font-size: 16px; padding: 6px 6px 8px; }
+  .headerAuthLink { font-size: 14px; padding: 6px 6px; }
+  .headerUserGreeting { font-size: 16px; }
 
   .headerBarMain {
     flex-direction: column;
     align-items: flex-start;
-    gap: 14px;
+    gap: 10px;
     width: 100%;
   }
 
-  .headerNav {
-    gap: 14px 18px;
-  }
+  .headerNav { gap: 12px 16px; }
 
   .headerBarAuth {
     width: 100%;
-    padding-top: 8px;
-    border-top: 1px solid rgba(26, 21, 35, 0.06);
+    padding-top: 6px;
+    border-top: 1px solid #f0e8e8;
   }
 }
 
