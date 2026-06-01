@@ -235,7 +235,12 @@ export function App() {
           <div className="headerBarMain">
             <Link to="/" className="siteBrand" aria-label="Basisi 홈">
               <span className="siteBrandIcon" aria-hidden>
-                🐣
+                <img
+                  src="/basisi-logo.png?v=2"
+                  alt=""
+                  className="siteBrandIconImg"
+                  draggable="false"
+                />
               </span>
               <span className="siteBrandWord" translate="no">
                 <span className="siteBrandWordBase">BASIS</span>

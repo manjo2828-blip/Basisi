@@ -364,7 +364,15 @@ export function HomePage({ onGoSearch }) {
         <div className="bh-footer-grid">
           <div className="bh-footer-brand">
             <div className="bh-footer-logo">
-              🐣 BASIS<em>I</em>
+              <span className="bh-footer-logo-mark" aria-hidden>
+                <img
+                  src="/basisi-logo.png?v=2"
+                  alt=""
+                  className="bh-footer-logo-img"
+                  draggable="false"
+                />
+              </span>
+              <span>BASIS<em>I</em></span>
             </div>
             <p>
               검증된 베이비시터와 가족을 연결하는
