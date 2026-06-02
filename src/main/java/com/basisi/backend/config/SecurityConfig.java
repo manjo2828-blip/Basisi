@@ -115,6 +115,11 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                 // 전 경로 OPTIONS 사전요청 허용.
                 .requestMatchers(new AntPathRequestMatcher("/**", "OPTIONS")).permitAll()
+                // 회원가입/로그인은 메서드까지 명시해서 우선 매칭되도록 합니다.
+                .requestMatchers(new AntPathRequestMatcher("/api/auth/signup", "POST")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/api/auth/login", "POST")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/api/auth/refresh", "POST")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/api/auth/logout", "POST")).permitAll()
                 // 인증/헬스/문서 — 회원가입/로그인 등은 토큰 없이 호출되어야 합니다.
                 .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/api/health")).permitAll()
