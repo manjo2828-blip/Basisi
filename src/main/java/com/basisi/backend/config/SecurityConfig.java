@@ -25,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 // 세션을 사용하지 않는 STATELESS 정책을 설정하기 위한 enum입니다.
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.http.HttpMethod;
 // UsernamePasswordAuthenticationFilter 앞에 필터를 추가하기 위한 클래스입니다.
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 // SecurityFilterChain 타입을 사용하기 위한 클래스입니다.
@@ -111,17 +110,18 @@ public class SecurityConfig {
         // 미인증 요청은 403이 아닌 401로 응답해 프론트가 재로그인을 유도할 수 있게 합니다.
         http.exceptionHandling(ex -> ex.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
         // Swagger 및 헬스체크 API는 인증 없이 접근 가능하게 허용합니다.
+        // Spring Security 6 + Render(Docker) 환경에서 MvcRequestMatcher 매핑이 어긋나는 문제를 방지하기 위해
+        // 모든 비보호 경로를 AntPathRequestMatcher 로 명시합니다.
         http.authorizeHttpRequests(auth -> auth
-                // Authorization 헤더가 있는 GET도 사전요청(OPTIONS)이 먼저 오므로 전 경로 OPTIONS 허용.
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers(
-                        "/api/auth/**",
-                        "/api/health",
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html"
-                ).permitAll()
-                // 공개 시터 탐색/상세·리뷰·점수 조회(GET) — AntPath로 명시(환경에 따라 method 매칭이 어긋나는 경우 방지).
+                // 전 경로 OPTIONS 사전요청 허용.
+                .requestMatchers(new AntPathRequestMatcher("/**", "OPTIONS")).permitAll()
+                // 인증/헬스/문서 — 회원가입/로그인 등은 토큰 없이 호출되어야 합니다.
+                .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/api/health")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/swagger-ui.html")).permitAll()
+                // 공개 시터 탐색/상세·리뷰·점수 조회(GET).
                 .requestMatchers(new AntPathRequestMatcher("/api/sitters/**", "GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/api/reviews/**", "GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/api/sitter-scores/sitters/**", "GET")).permitAll()
