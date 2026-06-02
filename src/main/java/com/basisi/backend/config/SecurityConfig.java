@@ -3,7 +3,10 @@ package com.basisi.backend.config;
 // JWT 인증 필터를 주입받기 위한 클래스입니다.
 import com.basisi.backend.security.JwtAuthenticationFilter;
 // CORS 설정을 위한 클래스입니다.
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 // Spring 컨텍스트에 보안 설정 빈을 등록하기 위한 어노테이션입니다.
 import org.springframework.context.annotation.Bean;
 // 자바 기반 설정 클래스를 선언하기 위한 어노테이션입니다.
@@ -38,6 +41,11 @@ public class SecurityConfig {
     // JWT 인증 필터를 주입받아 요청마다 토큰 검증에 사용합니다.
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    // Render 같은 배포 환경의 프론트엔드 도메인을 환경변수 BASISI_ALLOWED_ORIGINS 로 콤마 구분 추가합니다.
+    // 예) BASISI_ALLOWED_ORIGINS=https://basisi-frontend.onrender.com,https://basisi.example.com
+    @Value("${basisi.allowed-origins:}")
+    private String allowedOriginsProperty;
+
     // 생성자를 통해 JWT 인증 필터를 주입받습니다.
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         // 주입받은 JWT 인증 필터를 필드에 저장합니다.
@@ -56,11 +64,23 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         // CORS 설정 객체를 생성합니다.
         CorsConfiguration configuration = new CorsConfiguration();
-        // 로컬 개발: 포트가 바뀌어도(5174, vite preview 4173 등) 프리플라이트가 막히지 않도록 패턴 허용
-        configuration.setAllowedOriginPatterns(List.of(
+        // 로컬 개발 + 배포 도메인 모두 허용합니다.
+        List<String> patterns = new ArrayList<>(List.of(
                 "http://localhost:*",
-                "http://127.0.0.1:*"
+                "http://127.0.0.1:*",
+                // Render Static/Web Service 기본 도메인을 와일드카드로 허용합니다.
+                "https://*.onrender.com"
         ));
+        // 환경변수 BASISI_ALLOWED_ORIGINS (콤마 구분) 로 추가 도메인을 등록합니다.
+        if (allowedOriginsProperty != null && !allowedOriginsProperty.isBlank()) {
+            for (String origin : Arrays.asList(allowedOriginsProperty.split(","))) {
+                String trimmed = origin.trim();
+                if (!trimmed.isEmpty()) {
+                    patterns.add(trimmed);
+                }
+            }
+        }
+        configuration.setAllowedOriginPatterns(patterns);
         // 허용할 HTTP 메서드를 지정합니다.
         // OPTIONS는 브라우저 CORS 사전요청(preflight)에 필요합니다.
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
