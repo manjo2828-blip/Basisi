@@ -1,0 +1,11 @@
+.git
+.gitignore
+.idea
+.vscode
+build
+out
+target
+frontend
+node_modules
+*.log
+scripts/local-secrets.ps1
